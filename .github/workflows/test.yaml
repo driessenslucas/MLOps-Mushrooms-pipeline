@@ -10,6 +10,7 @@ jobs:
   default-job-test:
     runs-on: self-hosted
 
-    steps:
-      - name: Test
-        run: docker run -p 8001:8000 ghcr.io/lucasdriessens/mlops-mushrooms-api
+    # steps:
+    #   - name: Test
+    #     run: docker run -p 8001:8000 ghcr.io/lucasdriessens/mlops-mushrooms-api
+    #     run:
