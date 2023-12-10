@@ -1,0 +1,4 @@
+tensorflow
+fastapi[all]
+Pillow
+python-multipart

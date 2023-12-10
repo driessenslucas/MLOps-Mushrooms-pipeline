@@ -1,0 +1,56 @@
+name: data_split
+version: 0.1.0
+description: 'Reads a data asset of mushroom images and combines them into a training and testing dataset'
+display_name: Data Splitting to Train and Test
+is_deterministic: true
+type: command
+
+code: ./code
+command: 'python traintestsplit.py
+  --datasets ${{inputs.mushroom_1}} ${{inputs.mushroom_2}} ${{inputs.mushroom_3}} ${{inputs.mushroom_4}} ${{inputs.mushroom_5}} ${{inputs.mushroom_6}} ${{inputs.mushroom_7}} ${{inputs.mushroom_8}} ${{inputs.mushroom_9}}
+  --split_size ${{inputs.train_test_split_factor}}
+  --training_data ${{outputs.training_data}} --testing_data ${{outputs.testing_data}}
+  '
+
+inputs:
+  mushroom_1:
+    optional: false
+    type: uri_folder
+  mushroom_2:
+    optional: false
+    type: uri_folder
+  mushroom_3:
+    optional: false
+    type: uri_folder
+  mushroom_4:
+    optional: false
+    type: uri_folder
+  mushroom_5:
+    optional: false
+    type: uri_folder
+  mushroom_6:
+    optional: false
+    type: uri_folder
+  mushroom_7:
+    optional: false
+    type: uri_folder
+  mushroom_8:
+    optional: false
+    type: uri_folder
+  mushroom_9:
+    optional: false
+    type: uri_folder
+  train_test_split_factor:
+    optional: false
+    type: number
+
+outputs:
+  testing_data:
+    type: uri_folder
+  training_data:
+    type: uri_folder
+
+resources:
+  instance_count: 1
+
+environment: azureml:/subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourceGroups/MLOps/providers/Microsoft.MachineLearningServices/workspaces/lucasmlops/environments/aml-Pillow-cli/versions/0.1.0

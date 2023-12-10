@@ -1,0 +1,15 @@
+name: Test Local Runner
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  default-job-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Test
+        run: docker run -p 8001:8000 lucasdriessens/mlops-animals-api

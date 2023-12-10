@@ -1,0 +1,159 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+
+type: pipeline
+name: mushrooms-classification-v16
+display_name: mushrooms Classification-v16
+experiment_name: classification
+
+inputs:
+  train_test_split_factor: 20
+  epochs: 10
+
+outputs:
+  model:
+    type: uri_folder
+
+settings:
+  # default_compute: serverless
+  default_compute: azureml:shemk
+
+jobs:
+  data_prep_agaricus:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Agaricus/ # Update the path based on your dataset
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_amanita:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Amanita/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_boletus:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Boletus/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_cortinarius:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Cortinarius/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_entoloma:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Entoloma/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_hygrocybe:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Hygrocybe/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_lactarius:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Lactarius/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_russula:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Russula/
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_suillus:
+    type: command
+    component: ../components/dataprep/dataprep.yaml
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Suillus/ # Update the path based on your dataset
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_split:
+    type: command
+    component: ../components/dataprep/data_split.yaml
+    inputs:
+      mushroom_1: ${{parent.jobs.data_prep_agaricus.outputs.output_data}}
+      mushroom_2: ${{parent.jobs.data_prep_amanita.outputs.output_data}}
+      mushroom_3: ${{parent.jobs.data_prep_boletus.outputs.output_data}}
+      mushroom_4: ${{parent.jobs.data_prep_cortinarius.outputs.output_data}}
+      mushroom_5: ${{parent.jobs.data_prep_entoloma.outputs.output_data}}
+      mushroom_6: ${{parent.jobs.data_prep_hygrocybe.outputs.output_data}}
+      mushroom_7: ${{parent.jobs.data_prep_lactarius.outputs.output_data}}
+      mushroom_8: ${{parent.jobs.data_prep_russula.outputs.output_data}}
+      mushroom_9: ${{parent.jobs.data_prep_suillus.outputs.output_data}}
+      train_test_split_factor: ${{parent.inputs.train_test_split_factor}}
+    outputs:
+      testing_data:
+        mode: rw_mount
+      training_data:
+        mode: rw_mount
+
+  training:
+    type: command
+    component: ../components/training/training.yaml
+    inputs:
+      training_folder: ${{parent.jobs.data_split.outputs.training_data}}
+      testing_folder: ${{parent.jobs.data_split.outputs.testing_data}}
+      epochs: ${{parent.inputs.epochs}}
+    outputs:
+      output_folder:
+        mode: rw_mount
+
+  register:
+    type: command
+    component: azureml://registries/azureml/components/register_model/versions/0.0.9
+    inputs:
+      model_name: mushroom-classification
+      model_type: custom_model
+      model_path: ${{parent.jobs.training.outputs.output_folder}}
+    outputs:
+      registration_details_folder: ${{ parent.outputs.model }}

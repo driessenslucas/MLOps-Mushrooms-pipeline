@@ -1,0 +1,17 @@
+name: Azure ML Automated Pushing pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  start:
+    uses: ./.github/workflows/azure-ai.yaml
+    with:
+      # Set these to "true" if you want to run these pipeline steps or "false" to skip it
+      create_compute: false
+      train_model: false
+      skip_training_pipeline: true
+      deploy_model: true
+    secrets: inherit

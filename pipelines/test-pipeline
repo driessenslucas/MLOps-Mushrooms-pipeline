@@ -1,0 +1,86 @@
+schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+
+name: animals-classification1
+type: pipeline
+display_name: Animals Classification
+experiment_name: Animals Classification
+
+settings:
+  default_compute: serverless
+
+inputs:
+  train_test_split_factor: 20
+  epochs: 5
+
+outputs:
+  model:
+    type: uri_folder
+
+jobs:
+  data_prep_pandas:
+    type: command
+    component: ../components/dataprep/dataprep.py
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml:pandas:1
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_cats:
+    type: command
+    component: ../components/dataprep/dataprep.py
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml:cats:1
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_prep_dogs:
+    type: command
+    component: ../components/dataprep/dataprep.py
+    inputs:
+      data:
+        type: uri_folder
+        path: azureml:dogs:1
+    outputs:
+      output_data:
+        mode: rw_mount
+
+  data_split:
+    type: command
+    component: ../components/datasplit/traintestsplit.py
+    inputs:
+      pandas: ${{jobs.data_prep_pandas.outputs.output_data}}
+      cats: ${{jobs.data_prep_cats.outputs.output_data}}
+      dogs: ${{jobs.data_prep_dogs.outputs.output_data}}
+      train_test_split_factor: ${{parent.inputs.train_test_split_factor}}
+    outputs:
+      training_data:
+        mode: rw_mount
+      testing_data:
+        mode: rw_mount
+
+  training:
+    type: command
+    component: ../components/training/training.py
+    inputs:
+      training_folder: ${{parent.jobs.data_split.outputs.training_data}}
+      testing_folder: ${{parent.jobs.data_split.outputs.testing_data}}
+      epochs: ${{parent.inputs.epochs}}
+    outputs:
+      output_folder:
+        mode: rw_mount
+
+  model_registration:
+    type: command
+    component: azureml://registries/azureml/components/register_model/versions/0.0.9
+    inputs:
+      model_name: animals_classification
+      model_type: mlflow_model
+      model_path: ${{parent.jobs.training.outputs.output_folder}}
+    outputs:
+      registration_details_folder: ${{parent.outputs.model}}

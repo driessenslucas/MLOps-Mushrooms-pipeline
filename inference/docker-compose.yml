@@ -1,0 +1,22 @@
+version: '3'
+services:
+  api-1:
+    ports:
+      - 8001:8000
+    # build:
+    #   context: .
+    #   platforms:
+    #     - linux/arm64
+    image: lucasdriessens/mlops-mushrooms-api:0.1.0
+
+  api-2:
+    ports:
+      - 8002:8000
+    # build:
+    #   context: .
+    #   platforms:
+    #     - linux/arm64
+    image: lucasdriessens/mlops-mushrooms-api:0.1.1
+
+  # frontend:
+  #   build: ./web
