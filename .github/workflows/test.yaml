@@ -10,7 +10,15 @@ jobs:
   default-job-test:
     runs-on: self-hosted
 
-    # steps:
-    #   - name: Test
-    #     run: docker run -p 8001:8000 ghcr.io/lucasdriessens/mlops-mushrooms-api
-    #     run:
+    steps:
+      - name: Check if Docker image exists
+        run: |
+          if docker pull ghcr.io/lucasdriessens/mlops-mushrooms-api:latest; then
+            echo "Docker image exists, proceeding with the workflow."
+          else
+            echo "Docker image does not exist. Exiting workflow."
+            exit 1
+          fi
+
+      - name: Test
+        run: docker run -p 8001:8000 ghcr.io/lucasdriessens/mlops-mushrooms-api
