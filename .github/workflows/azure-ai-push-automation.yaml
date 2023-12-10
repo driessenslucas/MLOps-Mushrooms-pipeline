@@ -14,5 +14,4 @@ jobs:
       train_model: false
       skip_training_pipeline: true
       deploy_model: true
-      compute_name: testcomputermlops
     secrets: inherit

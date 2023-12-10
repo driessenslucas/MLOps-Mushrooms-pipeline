@@ -57,7 +57,6 @@ env:
   GROUP: MLOps
   WORKSPACE: lucasmlops
   LOCATION: westeurope
-  COMPUTE_NAME: ${{ github.event.inputs.compute_name }}
   # Allow to override for each run, in the workflow dispatch manual starts
   CREATE_COMPUTE: ${{ github.event.inputs.create_compute }}
   TRAIN_MODEL: ${{ github.event.inputs.train_model }}
@@ -108,7 +107,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute start --name $name --resource-group $GROUP --workspace-name $WORKSPACE
+            az ml compute start --name ${{ github.event.inputs.compute_name }} --resource-group $GROUP --workspace-name $WORKSPACE
             echo $name
         continue-on-error: true
 
@@ -130,7 +129,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute stop --name $name --resource-group $GROUP --workspace-name $WORKSPACE
+            az ml compute stop --name ${{ github.event.inputs.compute_name }} --resource-group $GROUP --workspace-name $WORKSPACE
         continue-on-error: true
 
   download:
