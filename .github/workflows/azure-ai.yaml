@@ -155,7 +155,7 @@ jobs:
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
             VERSION=$(az ml model list --name mushroom-classification --resource-group $GROUP --workspace-name $WORKSPACE --query "[0].version" -o tsv)
-            az ml model download --name mushroom-classification --download-path ./inference --version $VERSION" --resource-group $GROUP --workspace-name $WORKSPACE
+            az ml model download --name mushroom-classification --download-path ./inference --version $VERSION --resource-group $GROUP --workspace-name $WORKSPACE
 
       - name: Upload API Code for Docker
         # if: inputs.local_deployment
