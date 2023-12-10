@@ -25,8 +25,7 @@ Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygro
 # It would've been better to use an environment variable to fix this line actually...
 model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
 
-
-model = load_model('inference/mushroom-classification/INPUT_model_path/mushroom-cnn') # Model_name here!
+model = load_model(model_path) # Model_name here!
 
 @app.post('/upload/image')
 async def uploadImage(img: UploadFile = File(...)):
