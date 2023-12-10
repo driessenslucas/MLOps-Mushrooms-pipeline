@@ -11,17 +11,5 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Check if Docker image exists
-        id: check-image
-        run: |
-          if docker pull ghcr.io/driessenslucas/mlops-mushrooms-api:latest; then
-            echo "Docker image exists, proceeding with the workflow."
-            echo "::set-output name=image_exists::true"
-          else
-            echo "Docker image does not exist. Skipping Test step."
-            echo "::set-output name=image_exists::false"
-          fi
-
       - name: Test
-        if: steps.check-image.outputs.image_exists == 'true'
         run: docker run -p 8001:8000 ghcr.io/driessenslucas/mlops-mushrooms-api

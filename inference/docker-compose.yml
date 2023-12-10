@@ -7,7 +7,7 @@ services:
     #   context: .
     #   platforms:
     #     - linux/arm64
-    image: ghcr.io/driessenslucas/mlops-mushrooms-api
+    image: ghcr.io/driessenslucas/mlops-mushrooms-api:latest
 
   api-2:
     ports:
@@ -16,7 +16,7 @@ services:
     #   context: .
     #   platforms:
     #     - linux/arm64
-    image: ghcr.io/driessenslucas/mlops-mushrooms-api
+    image: ghcr.io/driessenslucas/mlops-mushrooms-api:latest
 
   # frontend:
   #   build: ./web

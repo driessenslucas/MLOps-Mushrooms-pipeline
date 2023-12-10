@@ -189,9 +189,6 @@ jobs:
           # The GitHub Branch
           # The GitHub SHA
           # More info: https://github.com/docker/build-push-action/blob/master/docs/advanced/tags-labels.md
-          tags: |
-            type=ref,event=branch
-            type=sha
 
       # Enter your GITHUB Token here!
       - name: Login to GHCR
@@ -221,4 +218,4 @@ jobs:
         with:
           context: ./inference
           push: true
-          tags: ${{ steps.docker-meta-data.outputs.tags }}
+          tags: ghcr.io/driessenslucas/mlops-mushrooms-api:latest
