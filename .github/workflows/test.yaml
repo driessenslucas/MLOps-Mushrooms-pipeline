@@ -14,7 +14,7 @@ jobs:
       - name: Check if Docker image exists
         id: check-image
         run: |
-          if docker pull ghcr.io/lucasdriessens/mlops-mushrooms-api:latest; then
+          if docker pull ghcr.io/driesseslucas/mlops-mushrooms-api:latest; then
             echo "Docker image exists, proceeding with the workflow."
             echo "::set-output name=image_exists::true"
           else
@@ -24,4 +24,4 @@ jobs:
 
       - name: Test
         if: steps.check-image.outputs.image_exists == 'true'
-        run: docker run -p 8001:8000 ghcr.io/lucasdriessens/mlops-mushrooms-api
+        run: docker run -p 8001:8000 ghcr.io/driesseslucas/mlops-mushrooms-api
