@@ -2,3 +2,4 @@ tensorflow
 fastapi[all]
 Pillow
 python-multipart
+gradio==4.8.0

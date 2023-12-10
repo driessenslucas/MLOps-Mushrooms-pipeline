@@ -1,12 +1,13 @@
-import numpy as np
-from PIL import Image
-from tensorflow.keras.models import load_model
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+import gradio as gr
 import os
+from PIL import Image
+import numpy as np
+from tensorflow.keras.models import load_model
 
-#set gpu  
-import tensorflow as tf  
+# Set GPU
+import tensorflow as tf
 tf.config.set_visible_devices([], 'GPU')
 
 app = FastAPI()
@@ -20,26 +21,85 @@ app.add_middleware(
 
 Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-
-#inference/mushroom-classification/INPUT_model_path/mushroom-cnn
-# It would've been better to use an environment variable to fix this line actually...
 model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
+model = load_model(model_path)
 
-model = load_model(model_path) # Model_name here!
+# Function to make predictions using the loaded model
+def predict(image):
+    original_image = image
+    original_image = original_image.resize((400, 400))
+    images_to_predict = np.expand_dims(np.array(original_image), axis=0)
+    predictions = model.predict(images_to_predict)
+    classifications = predictions.argmax(axis=1)
+    
+    # Print certainty of all classes
+    print(predictions)
 
+    return f'{Mushrooms[classifications.tolist()[0]]}'
+
+# Gradio Interface for Mushroom Prediction
+iface = gr.Interface(
+    fn=predict, 
+    inputs=gr.Image(type='pil', label='Take a Picture'),
+    outputs='text',
+    live=True
+)
+
+
+async def gradio():
+    # Replace the chatbot interface with the mushroom prediction interface
+    with gr.Blocks() as demo:
+        Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
+
+        model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
+        model = load_model(model_path)
+
+        # Function to make predictions using the loaded model
+        def predict(image):
+            original_image = image
+            original_image = original_image.resize((400, 400))
+            images_to_predict = np.expand_dims(np.array(original_image), axis=0)
+            predictions = model.predict(images_to_predict)
+            classifications = predictions.argmax(axis=1)
+            
+            # Print certainty of all classes
+            print(predictions)
+
+            return f'{Mushrooms[classifications.tolist()[0]]}'
+
+        # Gradio Interface for Mushroom Prediction
+        iface = gr.Interface(
+            fn=predict, 
+            inputs=gr.Image(type='pil', label='Take a Picture'),
+            outputs='text',
+            live=True
+        )
+
+        mushroom_prediction = iface  # Assuming your Gradio interface variable is named 'iface'
+
+    # Run Gradio Interface in the background
+    global app
+    demo.queue()
+    demo.startup_events()
+    app = gr.mount_gradio_app(app,demo, '/gradio')
+    
+    
+app.add_event_handler("startup", gradio)
+
+
+@app.get("/gradio_exists")
+async def gradio_exists():
+    return {"message": "The /gradio endpoint exists."}
+
+# Existing FastAPI endpoints
 @app.post('/upload/image')
 async def uploadImage(img: UploadFile = File(...)):
     original_image = Image.open(img.file)
-    original_image = original_image.resize((400, 400))
+    # Gradio will handle resizing
     images_to_predict = np.expand_dims(np.array(original_image), axis=0)
-    predictions = model.predict(images_to_predict) #[0 1 0]
-    classifications = predictions.argmax(axis=1) # [1]
-    
-    #print certaintity of all classes
-    print(predictions)
-    
-
-    return Mushrooms[classifications.tolist()[0]] # "Dog"
+    predictions = model.predict(images_to_predict)
+    classification = Mushrooms[predictions.argmax(axis=1).tolist()[0]]
+    return classification
 
 @app.get("/healthcheck")
 def healthcheck():
@@ -47,6 +107,8 @@ def healthcheck():
         "status": "Healthy",
         "version": "0.1.1"
     }
+    
+
 
 if __name__ == "__main__":
     import uvicorn
