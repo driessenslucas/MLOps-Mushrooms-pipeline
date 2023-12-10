@@ -57,6 +57,7 @@ env:
   GROUP: MLOps
   WORKSPACE: lucasmlops
   LOCATION: westeurope
+  COMPUTE_NAME: ${{ github.event.inputs.compute_name }}
   # Allow to override for each run, in the workflow dispatch manual starts
   CREATE_COMPUTE: ${{ github.event.inputs.create_compute }}
   TRAIN_MODEL: ${{ github.event.inputs.train_model }}
@@ -107,7 +108,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute start --name $name
+            az ml compute start --name $name --resource-group $GROUP --workspace-name $WORKSPACE
             echo $name
         continue-on-error: true
 
@@ -129,7 +130,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute stop --name ${{ steps.read_compute_yaml.outputs.name }}
+            az ml compute stop --name $name --resource-group $GROUP --workspace-name $WORKSPACE
         continue-on-error: true
 
   download:
@@ -199,7 +200,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.repo_token }}
 
       # # Enter your DOCKER HUB Token here!
       # - name: Login to Docker Hub
