@@ -7,6 +7,3 @@ actions-runner/
 **/*__pycache__
 **/.DS_STORE
 
-inference/mushroom-classification/*
-
-GradioGUI/mushroom-classification/*
