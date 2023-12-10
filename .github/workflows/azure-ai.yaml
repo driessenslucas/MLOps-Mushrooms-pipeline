@@ -184,7 +184,7 @@ jobs:
           # Use this for Docker Hub
           # nathansegers/mlops-mushrooms-api
           images: |
-            ghcr.io/driesseslucas/mlops-mushrooms-api
+            ghcr.io/driessenslucas/mlops-mushrooms-api
           # generate Docker tags based on the following events/attributes:
           # The GitHub Branch
           # The GitHub SHA
