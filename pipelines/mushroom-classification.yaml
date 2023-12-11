@@ -7,7 +7,7 @@ experiment_name: classification
 
 inputs:
   train_test_split_factor: 20
-  epochs: 10
+  epochs: 5
 
 outputs:
   model:
@@ -15,7 +15,7 @@ outputs:
 
 settings:
   # default_compute: serverless
-  default_compute: azureml:mlopspc
+  default_compute: azureml:mlopsfinal
 
 jobs:
   data_prep_agaricus:
