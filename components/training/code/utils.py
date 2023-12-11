@@ -92,6 +92,10 @@ def getFeatures(filepaths: List[str]) -> np.array:
 #     return model
 
 def buildModel(inputShape: tuple, classes: int) -> Sequential:
+    model = Sequential()
+    height, width, depth = inputShape
+    inputShape = (height, width, depth)
+    chanDim = -1
     # Create the VGG19 base model (excluding the top fully-connected layers)
     vgg19_base = VGG19(weights='imagenet', include_top=False, input_shape=inputShape)
 
@@ -99,8 +103,6 @@ def buildModel(inputShape: tuple, classes: int) -> Sequential:
     for layer in vgg19_base.layers:
         layer.trainable = False
 
-    # Create a Sequential model and add the VGG19 base
-    model = Sequential()
     model.add(vgg19_base)
 
     # Add your custom layers on top of the VGG19 base

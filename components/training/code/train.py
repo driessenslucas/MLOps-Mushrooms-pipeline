@@ -109,9 +109,9 @@ def main():
     # Reduce the Learning Rate when not learning more for 4 epochs.
     cb_reduce_lr_on_plateau = keras.callbacks.ReduceLROnPlateau(factor=.5, patience=4, verbose=1)
 
-    # opt = tf.keras.optimizers.legacy.SGD(lr=INITIAL_LEARNING_RATE, decay=INITIAL_LEARNING_RATE / MAX_EPOCHS) # Define the Optimizer
+    opt = tf.keras.optimizers.legacy.SGD(lr=INITIAL_LEARNING_RATE, decay=INITIAL_LEARNING_RATE / MAX_EPOCHS) # Define the Optimizer
 
-    opt = tf.keras.optimizers.legacy.Adam(learning_rate=INITIAL_LEARNING_RATE, decay=INITIAL_LEARNING_RATE / MAX_EPOCHS)
+    # opt = tf.keras.optimizers.legacy.Adam(learning_rate=INITIAL_LEARNING_RATE, decay=INITIAL_LEARNING_RATE / MAX_EPOCHS)
     model = buildModel((400, 400, 3), 9) # Create the AI model as defined in the utils script.
 
     model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
