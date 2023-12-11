@@ -107,7 +107,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute start --name ${{ github.event.inputs.compute_name }} --resource-group $GROUP --workspace-name $WORKSPACE
+            az ml compute start --name testcomputermlops --resource-group $GROUP --workspace-name $WORKSPACE
             echo $name
         continue-on-error: true
 
@@ -129,7 +129,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute stop --name ${{ github.event.inputs.compute_name }} --resource-group $GROUP --workspace-name $WORKSPACE
+            az ml compute stop --name testcomputermlops --resource-group $GROUP --workspace-name $WORKSPACE
         continue-on-error: true
 
   download:
