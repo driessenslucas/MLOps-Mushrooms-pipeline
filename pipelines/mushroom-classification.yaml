@@ -1,8 +1,8 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
 
 type: pipeline
-name: mushrooms-classification-v16
-display_name: mushrooms Classification-v16
+name: mushrooms-classification-v18
+display_name: mushrooms Classification-v18
 experiment_name: classification
 
 inputs:
@@ -15,7 +15,7 @@ outputs:
 
 settings:
   # default_compute: serverless
-  default_compute: azureml:shemk
+  default_compute: azureml:mlopspc
 
 jobs:
   data_prep_agaricus:
