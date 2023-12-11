@@ -11,7 +11,7 @@ jobs:
     with:
       # Set these to "true" if you want to run these pipeline steps or "false" to skip it
       create_compute: false
-      train_model: false
-      skip_training_pipeline: true
+      train_model: true
+      skip_training_pipeline: false
       deploy_model: true
     secrets: inherit
