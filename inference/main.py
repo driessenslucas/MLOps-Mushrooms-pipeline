@@ -97,11 +97,16 @@ async def gradio_exists():
 @app.post('/upload/image')
 async def uploadImage(img: UploadFile = File(...)):
     original_image = Image.open(img.file)
-    # Gradio will handle resizing
+    original_image = original_image.resize((400, 400))
     images_to_predict = np.expand_dims(np.array(original_image), axis=0)
-    predictions = model.predict(images_to_predict)
-    classification = Mushrooms[predictions.argmax(axis=1).tolist()[0]]
-    return classification
+    predictions = model.predict(images_to_predict) #[0 1 0]
+    classifications = predictions.argmax(axis=1) # [1]
+
+    #print certaintity of all classes
+    print(predictions)
+
+
+    return Mushrooms[classifications.tolist()[0]] # "Dog"
 
 @app.get("/healthcheck")
 def healthcheck():
