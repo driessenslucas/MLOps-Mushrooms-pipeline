@@ -78,7 +78,8 @@ jobs:
           for POD in $DEPLOYMENT_PODS; do
             kubectl logs -n $NAMESPACE $POD
           done
-          3600
+
+          kubectl port-forward $DEPLOYMENT_PODS 8080:8000 -n $NAMESPACE
 
       - name: Execute Tests
         run: |
