@@ -54,6 +54,7 @@ jobs:
         run: |
           # Add commands to execute your tests here
           # Consider waiting for the service to be fully up and running in the test namespace
+          sleep 1300  # Sleep for an hour to keep the containers running
 
       - name: Cleanup
         run: |
