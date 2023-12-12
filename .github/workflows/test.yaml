@@ -32,9 +32,12 @@ jobs:
 
       - name: Set up Kubectl
         run: |
-          # Ensure kubectl is installed and configured to interact with your local cluster
-          # For minikube, you might use `minikube kubectl -- get pods`
-          kubectl get pods
+          # Check if kubectl is installed
+          if ! command -v kubectl &> /dev/null
+          then
+              echo "kubectl is not installed. Please install it and configure it to interact with your local cluster."
+              exit 1
+          fi
 
       - name: Create Test Namespace
         run: |
