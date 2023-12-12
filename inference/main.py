@@ -54,7 +54,7 @@ async def gradio():
 
         # model_path = os.path.join("mushroom-cnn")
         # print(model_path)
-        model = load_model('inference/mushroom-classification/mushroom-cnn')
+        model = load_model('./mushroom-classification/mushroom-cnn')
 
         # Function to make predictions using the loaded model
         def predict(image):
