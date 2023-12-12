@@ -34,7 +34,7 @@ jobs:
         run: |
           # Ensure kubectl is installed and configured to interact with your local cluster
           # For minikube, you might use `minikube kubectl -- get pods`
-          kubectl --get pods
+          kubectl get pods
 
       - name: Create Test Namespace
         run: |
