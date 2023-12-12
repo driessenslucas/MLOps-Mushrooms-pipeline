@@ -33,9 +33,9 @@ jobs:
       - name: Set up Kubectl
         run: |
           # Check if kubectl is installed
-          if ! command -v kubectl &> /dev/null
+          if ! kubectl get pods -o wide
           then
-              echo "kubectl is not installed. Please install it and configure it to interact with your local cluster."
+              echo "kubectl is not installed or not set up. Please install it and configure it to interact with your local cluster."
               exit 1
           fi
 
