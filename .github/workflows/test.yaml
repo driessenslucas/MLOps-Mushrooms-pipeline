@@ -79,7 +79,9 @@ jobs:
             kubectl logs -n $NAMESPACE $POD
           done
 
-          kubectl port-forward $DEPLOYMENT_PODS 8080:8000 -n $NAMESPACE
+          echo "ip:"
+          kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
+          done
 
       - name: Execute Tests
         run: |
