@@ -79,14 +79,11 @@ jobs:
             kubectl logs -n $NAMESPACE $POD
           done
 
-          echo "ip:"
-          kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
-          done
-
       - name: Execute Tests
         run: |
           # Add commands to execute your tests here
           # For example, you can add a sleep command to keep the containers running
+          kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
           sleep 3600  # Sleep for an hour to keep the containers running
 
       - name: Cleanup
