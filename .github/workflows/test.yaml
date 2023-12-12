@@ -1,3 +1,19 @@
+# name: Test Local Runner
+
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   default-job-test:
+#     runs-on: self-hosted
+
+#     steps:
+#       - name: Test
+#         run: docker run -p 8001:8000 ghcr.io/driessenslucas/mlops-mushrooms-api:latest
+# test.yaml
 name: Test Local Runner
 
 on:
@@ -11,5 +27,31 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Test
-        run: docker run -p 8001:8000 ghcr.io/driessenslucas/mlops-mushrooms-api:latest
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Kubectl
+        run: |
+          # Ensure kubectl is installed and configured to interact with your local cluster
+          # For minikube, you might use `minikube kubectl -- get pods`
+          kubectl --get pods
+
+      - name: Create Test Namespace
+        run: |
+          NAMESPACE=test-ns-${GITHUB_RUN_ID}
+          kubectl create namespace $NAMESPACE
+          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
+
+      - name: Deploy to Kubernetes for Testing
+        run: |
+          kubectl apply -f ./inference/deployment.yaml -n ${{ env.NAMESPACE }}
+          kubectl apply -f ./inference/service.yaml -n ${{ env.NAMESPACE }}
+
+      - name: Execute Tests
+        run: |
+          # Add commands to execute your tests here
+          # Consider waiting for the service to be fully up and running in the test namespace
+
+      - name: Cleanup
+        run: |
+          kubectl delete namespace ${{ env.NAMESPACE }}
