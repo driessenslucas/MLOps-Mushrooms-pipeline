@@ -52,13 +52,14 @@ jobs:
 
       - name: Get Deployment Pods
         run: |
-          DEPLOYMENT_PODS=$(kubectl get pods -n $NAMESPACE -l app=your-app-label -o jsonpath='{.items[*].metadata.name}')
+          DEPLOYMENT_PODS=$(kubectl get pods -n $NAMESPACE -l app=api -o jsonpath='{.items[*].metadata.name}')
           echo "Deployment Pods: $DEPLOYMENT_PODS"
           echo "Namespace: $NAMESPACE"
           echo "Logs:"
           for POD in $DEPLOYMENT_PODS; do
             kubectl logs -n $NAMESPACE $POD
           done
+          sleep 3600
 
       - name: Execute Tests
         run: |
