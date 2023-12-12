@@ -21,8 +21,9 @@ app.add_middleware(
 
 Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-model_path = os.path.join("mushroom-cnn")
-model = load_model(model_path)
+# model_path = os.path.join("mushroom-cnn")
+# model = load_model(model_path)
+model = load_model('inference/mushroom-classification/mushroom-cnn')
 
 # Function to make predictions using the loaded model
 def predict(image):
