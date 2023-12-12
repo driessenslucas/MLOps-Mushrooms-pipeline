@@ -50,11 +50,21 @@ jobs:
           kubectl apply -f ./inference/deployment.yaml -n ${{ env.NAMESPACE }}
           kubectl apply -f ./inference/service.yaml -n ${{ env.NAMESPACE }}
 
+      - name: Get Deployment Pods
+        run: |
+          DEPLOYMENT_PODS=$(kubectl get pods -n $NAMESPACE -l app=your-app-label -o jsonpath='{.items[*].metadata.name}')
+          echo "Deployment Pods: $DEPLOYMENT_PODS"
+          echo "Namespace: $NAMESPACE"
+          echo "Logs:"
+          for POD in $DEPLOYMENT_PODS; do
+            kubectl logs -n $NAMESPACE $POD
+          done
+
       - name: Execute Tests
         run: |
           # Add commands to execute your tests here
-          # Consider waiting for the service to be fully up and running in the test namespace
-          sleep 1300  # Sleep for an hour to keep the containers running
+          # For example, you can add a sleep command to keep the containers running
+          sleep 3600  # Sleep for an hour to keep the containers running
 
       - name: Cleanup
         run: |
