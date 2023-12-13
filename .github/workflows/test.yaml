@@ -89,7 +89,7 @@ jobs:
         run: |
           # Add commands to execute your tests here
           # For example, you can add a sleep command to keep the containers running
-          kubectl port-forward svc/web-service 8600:80 -n $NAMESPACE & kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
+          kubectl port-forward svc/web-service 8750:80 -n $NAMESPACE & kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
           sleep 3600  # Sleep for an hour to keep the containers running
 
       - name: Cleanup
