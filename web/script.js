@@ -24,18 +24,31 @@ imageUpload.addEventListener('change', function (event) {
 });
 
 const classifyButton = document.getElementById('classifyButton');
+const imageElement = document.getElementById('pokemonImage');
+const imageDataURL = imageElement.src;
 
 classifyButton.addEventListener('click', function () {
 	//get image data from canvas
 	const imageDataURL = document.getElementById('pokemonImage').src;
 	//send image data to api
-	fetch('https://pokemon-classifier-api.herokuapp.com/classify', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			image: imageDataURL,
-		}),
-	});
+	fetch(imageDataURL)
+		.then((res) => res.blob())
+		.then((blob) => {
+			// Create a FormData object
+			const formData = new FormData();
+			formData.append('img', blob, 'image.png');
+
+			// Send the image file to the FastAPI server
+			fetch('http://localhost:8700/upload/image', {
+				method: 'POST',
+				body: formData,
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(data);
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+		});
 });
