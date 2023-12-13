@@ -153,7 +153,7 @@ mongo_uri = f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:27017/{mongo_
 
 client = MongoClient(mongo_uri)
 # Accessing the database
-db = client[mongodb_database]
+db = client[mongo_database]
 collection = db["mushrooms"]
 
 @app.post("/upload/mushroom")
