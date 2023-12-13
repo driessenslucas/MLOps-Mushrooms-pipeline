@@ -38,6 +38,9 @@ jobs:
               echo "kubectl is not installed or not set up. Please install it and configure it to interact with your local cluster."
               exit 1
           fi
+      - name: Clean up previous namespaces
+        run: |
+          kubectl get namespaces | grep 'test-ns-' | cut -f1 -d' ' | xargs -I {} kubectl delete namespace {}
 
       - name: Create Test Namespace
         run: |

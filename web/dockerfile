@@ -2,6 +2,7 @@
 FROM nginx:alpine
 
 # Copy the static website files into the default Nginx public folder
+COPY ./voice-overs/ /usr/share/nginx/html/voice-overs/
 COPY index.html /usr/share/nginx/html/
 COPY styles.css /usr/share/nginx/html/
 COPY script.js /usr/share/nginx/html/
