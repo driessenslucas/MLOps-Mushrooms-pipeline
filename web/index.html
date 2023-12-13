@@ -5,6 +5,10 @@
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>MushroomDEX</title>
+		<link
+			rel="icon"
+			href="./mushroom-2389225_960_720.png"
+			type="image/x-icon" />
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
@@ -17,18 +21,22 @@
 			<div class="pokedex-screen">
 				<!-- Image will be displayed here -->
 				<img
-					id="pokemonImage"
+					id="mushroomImage"
 					src="./Russula_shroom_Kaldari_01.jpg"
-					alt="Pokémon Image"
+					alt="Take or upload a picture of a mushroom to classify it."
 					class="pokedex-image" />
 			</div>
 			<div class="pokedex-lower-section">
 				<div class="pokedex-info">
-					<div class="info-text" id="pokemonName">Name:</div>
-					<div class="info-text" id="pokemonType">Type:</div>
-					<div class="info-description" id="pokemonDescription">
-						Description:
-					</div>
+					<label class="info-label">Name:</label>
+					<div class="info-text" id="mushroomName">Unknown</div>
+					<label class="info-label">Type:</label>
+					<div class="info-text" id="mushroomType">Unknown</div>
+					<label class="info-label">Description:</label>
+					<div class="info-description" id="mushroomDescription">Unknown</div>
+
+					<label class="info-label">Hear Mushroom Info:</label>
+					<button id="soundButton" class="sound-button">&#9835;</button>
 				</div>
 				<div class="pokedex-controls">
 					<input
