@@ -95,6 +95,4 @@ jobs:
 
       - name: Cleanup
         run: |
-          set +e  # Disable the "exit on error" behavior to ensure cleanup runs
-          kubectl delete namespace ${{ env.NAMESPACE }}
-          trap 'echo "Cleanup step completed."' EXIT
+          kubectl delete namespace ${{ env.NAMESPACE }} || true  # Use '|| true' to ensure this step always runs
