@@ -13,5 +13,6 @@ jobs:
       create_compute: false
       train_model: false
       skip_training_pipeline: true
-      deploy_model: false
+      download_model: true
+      deploy_model: true
     secrets: inherit
