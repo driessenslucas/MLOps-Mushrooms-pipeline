@@ -221,7 +221,7 @@ jobs:
           tags: ghcr.io/driessenslucas/mlops-mushrooms-api:latest
 
       - name: Docker build and push website image
-        id: docker_build
+        id: docker_build2
         uses: docker/build-push-action@v2
         with:
           context: ./web
