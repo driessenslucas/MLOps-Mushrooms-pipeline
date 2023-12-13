@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: website-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: website
@@ -18,3 +18,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              memory: '1Gi'
+              cpu: '500m'
+            limits:
+              memory: '4Gi'
+              cpu: '2'

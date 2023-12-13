@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api
@@ -17,3 +17,10 @@ spec:
           image: ghcr.io/driessenslucas/mlops-mushrooms-api:latest
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              memory: '1Gi'
+              cpu: '500m'
+            limits:
+              memory: '4Gi'
+              cpu: '2'
