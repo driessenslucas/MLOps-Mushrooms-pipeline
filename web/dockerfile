@@ -1,11 +1,13 @@
-# Use an official Nginx runtime as the base image
-FROM nginx:latest
+# Use the Nginx image from Docker Hub
+FROM nginx:alpine
 
-# Copy your website files to the container
-COPY ./ ./
+# Copy the static website files into the default Nginx public folder
+COPY index.html /usr/share/nginx/html/
+COPY styles.css /usr/share/nginx/html/
+COPY script.js /usr/share/nginx/html/
 
-# Expose the HTTP port
-EXPOSE 8500
+# Expose port 80
+EXPOSE 80
 
-# Start Nginx when the container runs
+# Start Nginx when the container has provisioned
 CMD ["nginx", "-g", "daemon off;"]

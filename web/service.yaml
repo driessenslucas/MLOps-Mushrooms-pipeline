@@ -8,6 +8,6 @@ spec:
     app: website
   ports:
     - protocol: TCP
-      port: 8500
+      port: 80
       targetPort: 8500
   type: NodePort
