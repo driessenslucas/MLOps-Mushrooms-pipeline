@@ -33,7 +33,7 @@ jobs:
       - name: Set up Kubectl
         run: |
           # Check if kubectl is installed
-          if ! minikube start & kubectl get pods -o wide
+          if ! kubectl get pods -o wide
           then
               echo "kubectl is not installed or not set up. Please install it and configure it to interact with your local cluster."
               exit 1
