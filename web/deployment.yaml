@@ -15,5 +15,6 @@ spec:
       containers:
         - name: website
           image: ghcr.io/driessenslucas/mlops-mushrooms-website:latest
+          imagePullPolicy: always
           ports:
             - containerPort: 80
