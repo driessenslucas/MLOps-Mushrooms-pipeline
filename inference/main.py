@@ -5,6 +5,8 @@ import os
 from PIL import Image
 import numpy as np
 from tensorflow.keras.models import load_model
+import pymongo
+from pymongo import MongoClient
 
 # Set GPU
 import tensorflow as tf
@@ -147,6 +149,8 @@ mongo_database = os.environ.get('MONGODB_DATABASE')
 
 #mongo_uri = f"mongodb://{mongodb_username}:{mongodb_password}@{mongodb_hostname}:27017/{mongodb_database}"
 mongo_uri = f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:27017/{mongo_database}"
+
+
 client = MongoClient(mongo_uri)
 # Accessing the database
 db = client[mongodb_database]
