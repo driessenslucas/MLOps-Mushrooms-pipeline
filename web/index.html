@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>MushroomDEX</title>
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+		<div class="pokedex-container">
+			<div class="pokedex-top-section">
+				<div class="circle"></div>
+				<div class="pokedex-title">MushroomDex</div>
+				<div class="circle smaller"></div>
+			</div>
+			<div class="pokedex-screen">
+				<!-- Image will be displayed here -->
+				<img
+					id="pokemonImage"
+					src="./Russula_shroom_Kaldari_01.jpg"
+					alt="Pokémon Image"
+					class="pokedex-image" />
+			</div>
+			<div class="pokedex-lower-section">
+				<div class="pokedex-info">
+					<div class="info-text" id="pokemonName">Name:</div>
+					<div class="info-text" id="pokemonType">Type:</div>
+					<div class="info-description" id="pokemonDescription">
+						Description:
+					</div>
+				</div>
+				<div class="pokedex-controls">
+					<input
+						type="file"
+						id="imageUpload"
+						class="image-upload"
+						accept="image/*;capture=camera" />
+
+					<label for="imageUpload" class="upload-button">Upload Image</label>
+					<button id="classifyButton">Classify</button>
+				</div>
+			</div>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>

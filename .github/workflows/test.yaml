@@ -50,6 +50,12 @@ jobs:
           kubectl apply -f ./inference/deployment.yaml -n ${{ env.NAMESPACE }}
           kubectl apply -f ./inference/service.yaml -n ${{ env.NAMESPACE }}
 
+      - name: Deploy Website to Kubernetes for Testing
+        run: |
+          # Assuming you have a separate YAML file for the website deployment and service
+          kubectl apply -f ./web/deployment.yaml -n ${{ env.NAMESPACE }}
+          kubectl apply -f ./web/service.yaml -n ${{ env.NAMESPACE }}
+
       - name: Get Deployment Pods and Wait for Them to Be Ready
         run: |
           # Define a function to check if all pods are ready
@@ -83,6 +89,7 @@ jobs:
         run: |
           # Add commands to execute your tests here
           # For example, you can add a sleep command to keep the containers running
+          kubectl port-forward svc/web-service 8500:8500 -n $NAMESPACE & \
           kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
           sleep 3600  # Sleep for an hour to keep the containers running
 

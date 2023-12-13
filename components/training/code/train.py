@@ -144,7 +144,7 @@ def main():
     ### Find a way to log more information to the Run context.
 
     # Save the confusion matrix to the outputs.
-    np.save(os.path.join(output_folder, '/confusion_matrix.npy'), cf_matrix)
+    np.save(os.path.join(output_folder, 'confusion_matrix.npy'), cf_matrix)
 
     print("DONE TRAINING")
 

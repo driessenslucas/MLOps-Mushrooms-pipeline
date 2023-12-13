@@ -1,0 +1,13 @@
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: website
+  ports:
+    - protocol: TCP
+      port: 8500
+      targetPort: 8500
+  type: NodePort

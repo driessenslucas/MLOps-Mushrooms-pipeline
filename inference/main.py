@@ -10,6 +10,16 @@ from tensorflow.keras.models import load_model
 import tensorflow as tf
 tf.config.set_visible_devices([], 'GPU')
 
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:8000",
+    "http://localhost:8001",
+    "http://localhost:8500",
+    "http://localhost:8600",
+]
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -21,40 +31,47 @@ app.add_middleware(
 
 Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-# model_path = os.path.join("mushroom-cnn")
-# model = load_model(model_path)
+#normally this would be model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
+#and then model = load_model(model_path)
+#but my regestiation of the model failed, so I added it manually into the model section in azureml, thus you need this for it to work
 model = load_model('./mushroom-classification/mushroom-cnn')
 
-# Function to make predictions using the loaded model
-def predict(image):
-    original_image = image
-    original_image = original_image.resize((400, 400))
-    images_to_predict = np.expand_dims(np.array(original_image), axis=0)
-    predictions = model.predict(images_to_predict)
-    classifications = predictions.argmax(axis=1)
+##old gradio implementation
+
+# # Function to make predictions using the loaded model
+# def predict(image):
+#     original_image = image
+#     original_image = original_image.resize((400, 400))
+#     images_to_predict = np.expand_dims(np.array(original_image), axis=0)
+#     predictions = model.predict(images_to_predict)
+#     classifications = predictions.argmax(axis=1)
     
-    # Print certainty of all classes
-    print(predictions)
+#     # Print certainty of all classes
+#     print(predictions)
 
-    return f'{Mushrooms[classifications.tolist()[0]]}'
+#     return f'{Mushrooms[classifications.tolist()[0]]}'
 
-# Gradio Interface for Mushroom Prediction
-iface = gr.Interface(
-    fn=predict, 
-    inputs=gr.Image(type='pil', label='Take a Picture'),
-    outputs='text',
-    live=True
-)
+# # Gradio Interface for Mushroom Prediction
+# iface = gr.Interface(
+#     fn=predict, 
+#     inputs=gr.Image(type='pil', label='Take a Picture'),
+#     outputs='text',
+#     live=True
+# )
 
 
 async def gradio():
-    # Replace the chatbot interface with the mushroom prediction interface
+    # implement gradio
     with gr.Blocks() as demo:
-        Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
+        # Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-        # model_path = os.path.join("mushroom-cnn")
-        # print(model_path)
-        model = load_model('./mushroom-classification/mushroom-cnn')
+        # # model_path = os.path.join("mushroom-cnn")
+        # # print(model_path)
+        
+        # #normally this would be model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
+        # #and then model = load_model(model_path)
+        # #but my regestiation of the model failed, so I added it manually into the model section in azureml, thus you need this for it to work
+        # model = load_model('./mushroom-classification/mushroom-cnn')
 
         # Function to make predictions using the loaded model
         def predict(image):
@@ -62,11 +79,14 @@ async def gradio():
             original_image = original_image.resize((400, 400))
             images_to_predict = np.expand_dims(np.array(original_image), axis=0)
             predictions = model.predict(images_to_predict)
+            
+            #get the highest probability
             classifications = predictions.argmax(axis=1)
             
-            # Print certainty of all classes
+            # Print probability of all classes
             print(predictions)
 
+            #get the name of the mushroom after the prediction
             return f'{Mushrooms[classifications.tolist()[0]]}'
 
         # Gradio Interface for Mushroom Prediction
@@ -77,18 +97,17 @@ async def gradio():
             live=True
         )
 
-        mushroom_prediction = iface  # Assuming your Gradio interface variable is named 'iface'
 
     # Run Gradio Interface in the background
     global app
     demo.queue()
     demo.startup_events()
-    app = gr.mount_gradio_app(app,demo, '/gradio')
+    app = gr.mount_gradio_app(app, demo, '/gradio')
     
-    
+#this allows the gradio endpoint to be created on startup
 app.add_event_handler("startup", gradio)
 
-
+#let the user know that the gradio endpoint exists
 @app.get("/gradio_exists")
 async def gradio_exists():
     return {"message": "The /gradio endpoint exists."}
@@ -104,10 +123,9 @@ async def uploadImage(img: UploadFile = File(...)):
 
     #print certaintity of all classes
     print(predictions)
-
-
     return Mushrooms[classifications.tolist()[0]] # "Dog"
 
+# Healthcheck endpoint
 @app.get("/healthcheck")
 def healthcheck():
     return {
@@ -115,8 +133,6 @@ def healthcheck():
         "version": "0.1.1"
     }
     
-
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
