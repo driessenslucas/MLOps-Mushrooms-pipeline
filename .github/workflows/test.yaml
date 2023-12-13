@@ -48,6 +48,11 @@ jobs:
           kubectl create namespace $NAMESPACE
           echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
 
+      - name: Setup mongodb
+        run: |
+          kubectl apply -f ./mongodb/deployment.yaml -n ${{ env.NAMESPACE }}
+          kubectl apply -f ./mongodb/service.yaml -n ${{ env.NAMESPACE }}
+
       - name: Deploy to Kubernetes for Testing
         run: |
           kubectl apply -f ./inference/deployment.yaml -n ${{ env.NAMESPACE }}
