@@ -5,8 +5,6 @@ import os
 from PIL import Image
 import numpy as np
 from tensorflow.keras.models import load_model
-import pymongo
-from pymongo import MongoClient
 
 # Set GPU
 import tensorflow as tf
@@ -20,6 +18,7 @@ origins = [
     "http://localhost:8001",
     "http://localhost:8500",
     "http://localhost:8600",
+    "http://localhost:8700",
 ]
 
 app = FastAPI()
@@ -134,41 +133,6 @@ def healthcheck():
         "status": "Healthy",
         "version": "0.1.1"
     }
-    
-# MongoDB setup (Replace with your MongoDB connection details)
-#load env variables
-import os
-
-#get the env variables
-mongo_user = os.environ.get('MONGODB_USERNAME')
-mongo_password = os.environ.get('MONGODB_PASSWORD')
-mongo_host = os.environ.get('MONGODB_HOSTNAME')
-mongo_port = os.environ.get('MONGODB_PORT')
-mongo_database = os.environ.get('MONGODB_DATABASE')
-
-
-#mongo_uri = f"mongodb://{mongodb_username}:{mongodb_password}@{mongodb_hostname}:27017/{mongodb_database}"
-mongo_uri = f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:27017/{mongo_database}"
-
-
-client = MongoClient(mongo_uri)
-# Accessing the database
-db = client[mongo_database]
-collection = db["mushrooms"]
-
-@app.post("/upload/mushroom")
-async def upload_mushroom(name: str, image: UploadFile = File(...)):
-    image_content = await image.read()
-    encoded_image = base64.b64encode(image_content).decode('utf-8')
-    
-    # Store in MongoDB
-    collection.insert_one({"name": name, "image": encoded_image})
-    return {"message": "Mushroom data stored successfully"}
-
-@app.get("/mushroom/history")
-def get_mushroom_history():
-    history = collection.find({}, {"_id": 0, "name": 1, "image": 1})
-    return list(history)
     
 if __name__ == "__main__":
     import uvicorn
