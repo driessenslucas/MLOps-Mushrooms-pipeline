@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
-description: Custom environment for Image Processing (with Pillow)
+description: Custom Tensorflow Environment
 name: aml-Tensorflow
 version: 0.1.0
 

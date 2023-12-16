@@ -55,7 +55,7 @@ The chosen model for this mushroom classification project is based on the VGG19 
 
 ### 2.3 Data Preprocessing
 
-Effective data preprocessing is a critical step in machine learning projects, ensuring that the dataset is ready for model training. In this section, we will outline the key data preprocessing steps undertaken for the mushroom classification project.
+Effective data preprocessing is a really important step in machine learning projects, ensuring that the dataset is ready for model training. In this section, I had to do quite a bit of preprocessing, mainly to prepare for the train/test split.
 
 #### 2.3.1 Data preparation for this specific dataset (done outside of the pipeline)
 
@@ -222,7 +222,7 @@ same thing with the components folder, you will need to adjust the model and the
 
 ## 3. Cloud AI Services
 
-Azure Machine Learning Service was utilized extensively throughout the project. Azure ML provided a powerful platform for managing the entire MLOps pipeline, from data preparation to model deployment.
+Azure Machine Learning Service was utilized extensively throughout the project. Azure ML provided a powerful platform for managing the entire MLOps pipeline, from data preparation to model registration.
 
 ### 3.1 Compute Resource Management
 
@@ -233,11 +233,15 @@ Compute resources were created and managed within Azure ML. This included settin
 
 ### 3.2 Environment Setup
 
-Azure ML enabled the creation and management of environments for the project. Specifically, environment configurations for libraries like Pillow and TensorFlow were defined in separate YAML files, found in the ./environments directory. I didn't use the compute.yaml, since I made my own cluster. The rest I did use.
+Azure ML enabled the creation and management of environments for the project. Specifically, environment configurations for libraries like Pillow and TensorFlow that were defined in separate YAML files, found in the ./environments directory. I didn't use the compute.yaml, since I made my own computing cluster. The rest of the environments I did create and use.
 
-<summary><b>Environment</b></summary>
+<summary><b>Environments</b></summary>
+
+**_pillow_**
 <img src="./images/pillow.png" alt="pillow env" width="800"/>
-<img src="./images/tensorflow.png" alt="tensorflow env" width="800"/>
+
+**_tensorflow_**
+<img src="./images/Tensroflow.png" alt="tensorflow env" width="800"/>
 
 ## 4. Model Training and Evaluation
 
@@ -247,7 +251,7 @@ Azure ML enabled the creation and management of environments for the project. Sp
 
 ### 4.2 Model Training
 
-Model training was a critical step in the project. The model architecture, hyperparameters, and training process were meticulously defined. Azure ML facilitated efficient training, utilizing the specified compute resources.
+Model training was most definitely the most important step in the project. The model architecture, hyperparameters, data augmentation and training process were key for this project to work.
 
 ```python
    ## since the training time is already large the amount of epochs is kept really low (5 in this case)
@@ -295,7 +299,7 @@ FastAPI, a high-performance web framework for building APIs with Python, was emp
 
 ### 5.1 Fast api Deployment
 
-The model is integrated into a fastapi, which Is then depoyed to a docker container, and then pushed to the github packages repo.
+The model is integrated into a fastapi, which Is then build into a docker image and finally that image is then pushed to the github packages repo.
 I later use this docker image to deploy the api on kubernetes.
 
 **_dockerfile for the fastapi_**
@@ -314,7 +318,7 @@ I later use this docker image to deploy the api on kubernetes.
 
 ### 5.4 Web App
 
-This simple web app is used to do an api request with the uploaded image, and then based on the result it will display some information about the mushroom.
+This simple web app is create a fun and interactive way to test the finished product, its made to do an api request with an uploaded image, then based on the result it will display some information about the mushroom. (I added text to speech to make it more fun)
 look at the code snippet below to see how the api call is done.
 
 ```js
@@ -420,7 +424,7 @@ async def gradio():
 
 ## 6. Integration with Existing Software
 
-In a practical scenario, this MLOps pipeline can seamlessly integrate with existing software systems.
+In a practical scenario, this MLOps pipeline is ready to be integrated into an existing software system.
 For this I created a fun little website that can be found in the ./web directory. It makes an api call to the fastapi endpoint to get its data
 
 <img src="./images/website-interface.png" alt="website" width="800"/>
@@ -437,16 +441,18 @@ fastapi endpoints.... so there isnt much to it, you could deploy the api to a co
 
 ## 7. Automation and Version Control
 
-In this project, automation and version control are not just conveniences but necessities for ensuring efficiency and consistency throughout the machine learning lifecycle. To achieve this, we leveraged the power of GitHub Actions, a robust platform for automating workflows, which plays a pivotal role in our project. GitHub Actions allows for the orchestration of various tasks, from data handling to model training and deployment, all triggered by specific GitHub events like code commits or pull requests.
+In this project, automation and version control are not just conveniences but necessities for ensuring efficiency and consistency throughout the machine learning lifecycle. To achieve this, I leveraged the power of GitHub Actions, a robust platform for automating workflows, which plays a pivotal role in our project. GitHub Actions allows for the orchestration of various tasks, from data handling to model training and deployment, all triggered by specific GitHub events like code commits or pull requests.
 
 Automation and version control are integral to maintaining an efficient MLOps pipeline. GitHub Actions played a pivotal role in automating various aspects of the project.
 The key components of my automation strategy include:
 
-    Data Handling: Automating the extraction and preprocessing of data to prepare it for training.
-    Model Training: Triggering the training process of the machine learning model with specified parameters.
-    Model Evaluation: Systematically evaluating the model performance to ensure it meets our criteria.
-    Model Deployment: Seamlessly deploying the trained model to a production environment, making it ready for real-world use.
-    Version Control: Integrating version control practices to manage and track different versions of the model, ensuring traceability and accountability.
+```yaml
+Data Handling: Automating the extraction and preprocessing of data to prepare it for training.
+Model Training: Triggering the training process of the machine learning model with specified parameters.
+Model Evaluation: Systematically evaluating the model performance to ensure it meets our criteria.
+Model Deployment: Seamlessly deploying the trained model to a production environment, making it ready for real-world use.
+Version Control: Integrating version control practices to manage and track different versions of the model, ensuring traceability and accountability.
+```
 
 In the following sections, I delve into the specifics of each step, illustrating how GitHub Actions enhances our MLOps pipeline's efficiency and robustness.
 
@@ -490,7 +496,9 @@ after testing is done it removes the namespace and all the containing services a
 
 ### 7.2 Version Control
 
-Version control is crucial for maintaining a coherent and traceable project history, and it extends to the management of machine learning model versions. In this project, model versioning was systematically handled within the GitHub Actions workflows.
+Version control is mendatory for any project, but especially when wanting to create a pipeline that can be used in a production environment. without it, you would 100% run into problems.
+
+here I pasted some snippers of the version control I used in this project.
 
 #### 7.2.1 Training model version
 
@@ -571,18 +579,14 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 - kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
 
 ## demos
+
 (use sound for the web app demo to hear the description being read out loud)
 
+<https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/654ceb40-4fa5-4354-b318-4921450ee955>
 
-https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/654ceb40-4fa5-4354-b318-4921450ee955
+<https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/c75f7b37-0d1c-4acc-b045-bb258e13633c>
 
-
-https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/c75f7b37-0d1c-4acc-b045-bb258e13633c
-
-
-https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/cd7ff6f4-3cc3-468a-aed1-70c9643b79da
-
-
+<https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/cd7ff6f4-3cc3-468a-aed1-70c9643b79da>
 
 ## How to download an AI model using the Azure ML CLI
 
