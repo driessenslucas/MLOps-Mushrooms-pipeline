@@ -571,7 +571,7 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 - kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
 
 ## demos
-(use sound for the web app demo to hear the descript being read out loud)
+(use sound for the web app demo to hear the description being read out loud)
 
 
 https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/654ceb40-4fa5-4354-b318-4921450ee955
