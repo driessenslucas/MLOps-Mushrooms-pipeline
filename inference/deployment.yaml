@@ -15,17 +15,6 @@ spec:
       containers:
         - name: api
           image: ghcr.io/driessenslucas/mlops-mushrooms-api:latest
-          env:
-            - name: MONGODB_USERNAME
-              value: 'root'
-            - name: MONGODB_PASSWORD
-              value: 'example'
-            - name: MONGODB_HOSTNAME
-              value: 'mongodb-service'
-            - name: MONGODB_PORT
-              value: '27017'
-            - name: MONGODB_DATABASE
-              value: 'mushrooms'
           ports:
             - containerPort: 8000
           resources:
