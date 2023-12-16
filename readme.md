@@ -6,9 +6,11 @@
 
 This report outlines the details of an MLOps project focused on mushroom classification. The project's primary objective is to demonstrate the principles of MLOps by building an end-to-end pipeline for creating, training, deploying, and testing a machine learning model using Azure Machine Learning (Azure ML) services. The report highlights key aspects of the project, including data preparation, model training and evaluation, deployment with FastAPI, integration possibilities, and automation strategies.
 
-## 2. Project Overview
+[look at demo videos](#demos)
 
 ![webapp](./images/website-demo.gif)
+
+## 2. Project Overview
 
 ### 2.1 Dataset
 
@@ -568,19 +570,19 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 - how to create azure service principle to access azure services: <https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash>
 - kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
 
-## 10. demo videos
+## demos
+(use sound for the web app demo to hear the descript being read out loud)
 
-<video width="320" height="240" controls>
-  <source src="./demo(videos)/fastapi-demo.mp4" type="video/mp4">
-</video>
 
-<video width="320" height="240" controls>
-  <source src="./demo(videos)/gradio-demo.mp4" type="video/mp4">
-</video>
+https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/654ceb40-4fa5-4354-b318-4921450ee955
 
-<video width="320" height="240" controls>
-  <source src="./demo(videos)/website-demo.mp4" type="video/mp4">
-</video>
+
+https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/c75f7b37-0d1c-4acc-b045-bb258e13633c
+
+
+https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/cd7ff6f4-3cc3-468a-aed1-70c9643b79da
+
+
 
 ## How to download an AI model using the Azure ML CLI
 
