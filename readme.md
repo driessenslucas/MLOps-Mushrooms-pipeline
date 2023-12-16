@@ -8,6 +8,8 @@ This report outlines the details of an MLOps project focused on mushroom classif
 
 ## 2. Project Overview
 
+![webapp](./images/website-demo.gif)
+
 ### 2.1 Dataset
 
 The project involves the classification of mushrooms into nine distinct categories. The dataset used for this task contains of 8000+ images of 9 different mushroom families, each seperated in its own folder.
@@ -32,7 +34,7 @@ The chosen model for this mushroom classification project is based on the VGG19 
    <img src="./images/original_cnn.png" alt="cnn" width="400"/>
 </details>
 
-**_which gave me the following results:_**
+**_results with a custom cnn:_**
 
 - <img src="./images/eval_metrics_original_cnn.png" alt="cnn" width="400"/>
 
@@ -306,7 +308,7 @@ I later use this docker image to deploy the api on kubernetes.
 
 ### 5.3 API Endpoints
 
-<img src="./images/fastapi.png" alt="fastapi end points" width="800"/>
+<img src="./images/fastapi-endpoints.png" alt="fastapi end points" width="800"/>
 
 ### 5.4 Web App
 
@@ -361,10 +363,6 @@ classifyButton.addEventListener('click', function () {
 
 - <img src="./images/website-service.png" alt="fastapi kuberentes service" width="800"/>
 
-### 5.5 web app interface
-
-<img src="./images/website.png" alt="website" width="800"/>
-
 ### 5.6 Gradio
 
 I also used Gradio to build a simpler gui, since the webapp was more for fun and as a potential software integration.
@@ -416,14 +414,14 @@ async def gradio():
     app = gr.mount_gradio_app(app, demo, '/gradio')
 ```
 
-<img src="./images/gradio.png" alt="gradio" width="800"/>
+<img src="./images/gradio-gui.png" alt="gradio" width="800"/>
 
 ## 6. Integration with Existing Software
 
 In a practical scenario, this MLOps pipeline can seamlessly integrate with existing software systems.
 For this I created a fun little website that can be found in the ./web directory. It makes an api call to the fastapi endpoint to get its data
 
-<img src="./images/website.png" alt="website" width="800"/>
+<img src="./images/website-interface.png" alt="website" width="800"/>
 
 ### 6.1 fake company
 
@@ -569,6 +567,20 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 - how to use github secrets <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>
 - how to create azure service principle to access azure services: <https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash>
 - kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
+
+## 10. demo videos
+
+<video width="320" height="240" controls>
+  <source src="./demo(videos)/fastapi-demo.mp4" type="video/mp4">
+</video>
+
+<video width="320" height="240" controls>
+  <source src="./demo(videos)/gradio-demo.mp4" type="video/mp4">
+</video>
+
+<video width="320" height="240" controls>
+  <source src="./demo(videos)/website-demo.mp4" type="video/mp4">
+</video>
 
 ## How to download an AI model using the Azure ML CLI
 
