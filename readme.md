@@ -153,7 +153,7 @@ This function reads and converts the images into numerical arrays (pixel values)
 
 ## prerequisites
 
-<p>Before using these pipelines, ensure you have the following prerequisites set up:</p>
+<p>Before continuing, ensure you have the following prerequisites set up:</p>
 
 ### Azure Credentials
 
@@ -218,7 +218,7 @@ Ensure the following configurations are correctly set in your Azure ML environme
 
 To use these pipelines, clone this repository,!!! make sure you have the necessary permissions and configurations set up in your Azure ML workspace and github repository. !!!
 then you will need to go into the pipelines folder and change what you need for your specific use case, adding your own data and such.
-same thing with the components folder, you will need to adjust the model and the preprocessing to your specific use case.
+same thing with the components folder, you will need to adjust the model and the preprocessing I just went over to your specific use case.
 
 ## 3. Cloud AI Services
 
@@ -226,7 +226,7 @@ Azure Machine Learning Service was utilized extensively throughout the project. 
 
 ### 3.1 Compute Resource Management
 
-Compute resources were created and managed within Azure ML. This included setting up an Azure ML compute cluster to make the training faster since I had to preprocess 9 imagesets into a train/test split.
+Compute resources were created and managed within Azure ML. This included setting up an Azure ML compute cluster instead of a compute instance to make the training faster (more nodes) since I had to preprocess 9 imagesets into a train/test split.
 
 <summary><b>Compute Cluster</b></summary>
 <img src="./images/computecluster.png" alt="compute_cluster" width="1000"/>
