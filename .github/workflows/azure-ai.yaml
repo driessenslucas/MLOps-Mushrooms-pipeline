@@ -252,17 +252,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Set Kubernetes Context and Install kubectl
-        uses: azure/CLI@v1
+      - name: Set AKS context
+        uses: azure/aks-set-context@v1
         with:
-          azcliversion: 2.53.0
-          inlineScript: |
-            az aks get-credentials --name $CLUSTER --resource-group $GROUP
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: $CLUSTER
+          resource-group: $GROUP
 
-      - name: Deploy to azure
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.53.0
-          inlineScript: |
-            az aks command invoke -c "kubectl apply -f ./inference/deployment.yaml" --resource-group $GROUP -n $CLUSTER
-            az aks command invoke -c "kubectl apply -f ./web/deployment.yaml" --resource-group $GROUP -n $CLUSTER
+      - name: deploy website and fastapi onto the kubernetes
+        run: |
+          kubectl apply -f ./web/deployment.yaml
+          kubectl apply -f ./inference/deployment.yaml
+
+      - name: ☸ tye deploy
+        run: |
+          tye deploy -v Debug
