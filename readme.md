@@ -504,7 +504,7 @@ I had to add some new env variables in the github actions file, for this to work
   with:
     azcliversion: 2.53.0
     inlineScript: |
-      az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons monitoring --enable-msi-auth-for-monitoring --generate-ssh-keys
+      az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons --enable-msi-auth-for-monitoring --generate-ssh-keys
 ```
 
 - And also added a new job responsible for deploying the api and the website on the kubernetes cluster:
