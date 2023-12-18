@@ -2,6 +2,57 @@
 
 # MLOps Project Report
 
+## Table of Contents
+
+- [MLOps Project Report](#mlops-project-report)
+  - [Table of Contents](#table-of-contents)
+  - [1. Introduction](#1-introduction)
+  - [2. Project Overview](#2-project-overview)
+    - [2.1 Dataset](#21-dataset)
+      - [2.1.1 Data upload](#211-data-upload)
+    - [2.2 AI Model Selection](#22-ai-model-selection)
+      - [2.2.1 Model decision](#221-model-decision)
+    - [2.3 Data Preprocessing](#23-data-preprocessing)
+      - [2.3.1 Data preparation for this specific dataset (done outside of the pipeline)](#231-data-preparation-for-this-specific-dataset-done-outside-of-the-pipeline)
+      - [2.3.2 Data prep in the pipeline](#232-data-prep-in-the-pipeline)
+      - [2.3.3 Target Label Extraction](#233-target-label-extraction)
+      - [2.3.4 label Encoding](#234-label-encoding)
+      - [2.3.5 feature Extraction](#235-feature-extraction)
+  - [prerequisites](#prerequisites)
+    - [Azure Credentials](#azure-credentials)
+    - [GitHub Secrets](#github-secrets)
+    - [Configurations](#configurations)
+    - [Getting Started](#getting-started)
+  - [3. Cloud AI Services](#3-cloud-ai-services)
+    - [3.1 Compute Resource Management](#31-compute-resource-management)
+    - [3.2 Environment Setup](#32-environment-setup)
+  - [4. Model Training and Evaluation](#4-model-training-and-evaluation)
+    - [4.1 Azure ML](#41-azure-ml)
+    - [4.2 Model Training](#42-model-training)
+    - [4.3 Model Evaluation](#43-model-evaluation)
+      - [4.3.1 conclusions](#431-conclusions)
+  - [5. Deployment](#5-deployment)
+    - [5.1 Fast api Deployment](#51-fast-api-deployment)
+    - [5.3 API Endpoints](#53-api-endpoints)
+    - [5.4 Web App](#54-web-app)
+    - [5.6 Gradio](#56-gradio)
+  - [6. Integration with Existing Software](#6-integration-with-existing-software)
+    - [6.1 fake company](#61-fake-company)
+    - [6.1.1 integration in an existing software system](#611-integration-in-an-existing-software-system)
+  - [7. Automation and Version Control](#7-automation-and-version-control)
+    - [7.1 GitHub Actions](#71-github-actions)
+      - [jobs](#jobs)
+      - [all this can then be tested with the test.yaml file](#all-this-can-then-be-tested-with-the-testyaml-file)
+    - [7.2 Version Control](#72-version-control)
+      - [7.2.1 Training model version](#721-training-model-version)
+      - [7.2.2 Model Version Retrieval](#722-model-version-retrieval)
+      - [7.2.3 Model Artifact Storage](#723-model-artifact-storage)
+      - [7.2.4 Model Deployment Version](#724-model-deployment-version)
+  - [8. Conclusion](#8-conclusion)
+  - [9. useful links](#9-useful-links)
+  - [demos](#demos)
+  - [How to download an AI model using the Azure ML CLI](#how-to-download-an-ai-model-using-the-azure-ml-cli)
+
 ## 1. Introduction
 
 This report outlines the details of an MLOps project focused on mushroom classification. The project's primary objective is to demonstrate the principles of MLOps by building an end-to-end pipeline for creating, training, deploying, and testing a machine learning model using Azure Machine Learning (Azure ML) services. The report highlights key aspects of the project, including data preparation, model training and evaluation, deployment with FastAPI, integration possibilities, and automation strategies.
@@ -293,7 +344,7 @@ The model is performing pretty okay considering I only had around 259 images for
 
 And the training already took 5hours, so It wasn't really feasible to add more data in my case, given the time frame of this project.
 
-## 5. FastAPI
+## 5. Deployment
 
 FastAPI, a high-performance web framework for building APIs with Python, was employed to create a user-friendly interface for the trained model.
 
