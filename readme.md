@@ -526,10 +526,11 @@ deploy-kubernetes:
         cluster-name: ${{ env.CLUSTER }}
         resource-group: ${{ env.GROUP }}
 
-    - name: deploy website and fastapi onto the kubernetes
-      run: |
-        kubectl apply -f ./web/deployment.yaml
-        kubectl apply -f ./inference/deployment.yaml
+      - name: deploy website and fastapi onto the kubernetes
+        run: |
+          NAMESPACE=mushrooms-${GITHUB_RUN_ID}
+          kubectl apply -f ./web/deployment.yaml -n $NAMESPACE
+          kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
 ```
 
 - to ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)

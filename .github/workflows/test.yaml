@@ -30,72 +30,72 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Kubectl
-        run: |
-          # Check if kubectl is installed
-          if ! kubectl get pods -o wide
-          then
-              echo "kubectl is not installed or not set up. Please install it and configure it to interact with your local cluster."
-              exit 1
-          fi
+      # - name: Set up Kubectl
+      #   run: |
+      #     # Check if kubectl is installed
+      #     if ! kubectl get pods -o wide
+      #     then
+      #         echo "kubectl is not installed or not set up. Please install it and configure it to interact with your local cluster."
+      #         exit 1
+      #     fi
 
-      - name: Clean up previous namespaces
-        run: |
-          kubectl get namespaces | grep 'test-ns-' | cut -f1 -d' ' | xargs -I {} kubectl delete namespace {}
+      # - name: Clean up previous namespaces
+      #   run: |
+      #     kubectl get namespaces | grep 'test-ns-' | cut -f1 -d' ' | xargs -I {} kubectl delete namespace {}
 
-      - name: Create Test Namespace
-        run: |
-          NAMESPACE=test-ns-${GITHUB_RUN_ID}
-          kubectl create namespace $NAMESPACE
-          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
+      # - name: Create Test Namespace
+      #   run: |
+      #     NAMESPACE=test-ns-${GITHUB_RUN_ID}
+      #     kubectl create namespace $NAMESPACE
+      #     echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
 
-      - name: Deploy to Kubernetes for Testing
-        run: |
-          kubectl apply -f ./inference/deployment.yaml -n ${{ env.NAMESPACE }}
-          kubectl apply -f ./inference/service.yaml -n ${{ env.NAMESPACE }}
+      # - name: Deploy to Kubernetes for Testing
+      #   run: |
+      #     kubectl apply -f ./inference/deployment.yaml -n ${{ env.NAMESPACE }}
+      #     kubectl apply -f ./inference/service.yaml -n ${{ env.NAMESPACE }}
 
-      - name: Deploy Website to Kubernetes for Testing
-        run: |
-          # Assuming you have a separate YAML file for the website deployment and service
-          kubectl apply -f ./web/deployment.yaml -n ${{ env.NAMESPACE }}
-          kubectl apply -f ./web/service.yaml -n ${{ env.NAMESPACE }}
+      # - name: Deploy Website to Kubernetes for Testing
+      #   run: |
+      #     # Assuming you have a separate YAML file for the website deployment and service
+      #     kubectl apply -f ./web/deployment.yaml -n ${{ env.NAMESPACE }}
+      #     kubectl apply -f ./web/service.yaml -n ${{ env.NAMESPACE }}
 
-      - name: Get Deployment Pods and Wait for Them to Be Ready
-        run: |
-          # Define a function to check if all pods are ready
-          function are_pods_ready() {
-            local pods="$1"
-            for pod in $pods; do
-              status=$(kubectl get pod -n $NAMESPACE $pod -o jsonpath='{.status.phase}')
-              if [ "$status" != "Running" ]; then
-                return 1
-              fi
-            done
-            return 0
-          }
+      # - name: Get Deployment Pods and Wait for Them to Be Ready
+      #   run: |
+      #     # Define a function to check if all pods are ready
+      #     function are_pods_ready() {
+      #       local pods="$1"
+      #       for pod in $pods; do
+      #         status=$(kubectl get pod -n $NAMESPACE $pod -o jsonpath='{.status.phase}')
+      #         if [ "$status" != "Running" ]; then
+      #           return 1
+      #         fi
+      #       done
+      #       return 0
+      #     }
 
-          DEPLOYMENT_PODS=$(kubectl get pods -n $NAMESPACE -l app=api -o jsonpath='{.items[*].metadata.name}')
-          echo "Deployment Pods: $DEPLOYMENT_PODS"
-          echo "Namespace: $NAMESPACE"
+      #     DEPLOYMENT_PODS=$(kubectl get pods -n $NAMESPACE -l app=api -o jsonpath='{.items[*].metadata.name}')
+      #     echo "Deployment Pods: $DEPLOYMENT_PODS"
+      #     echo "Namespace: $NAMESPACE"
 
-          # Wait for the pods to become ready
-          while ! are_pods_ready "$DEPLOYMENT_PODS"; do
-            echo "Waiting for pods to become ready..."
-            sleep 10
-          done
+      #     # Wait for the pods to become ready
+      #     while ! are_pods_ready "$DEPLOYMENT_PODS"; do
+      #       echo "Waiting for pods to become ready..."
+      #       sleep 10
+      #     done
 
-          echo "Logs:"
-          for POD in $DEPLOYMENT_PODS; do
-            kubectl logs -n $NAMESPACE $POD
-          done
+      #     echo "Logs:"
+      #     for POD in $DEPLOYMENT_PODS; do
+      #       kubectl logs -n $NAMESPACE $POD
+      #     done
 
-      - name: Execute Tests
-        run: |
-          # Add commands to execute your tests here
-          # For example, you can add a sleep command to keep the containers running
-          kubectl port-forward svc/web-service 8750:80 -n $NAMESPACE & kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
-          sleep 3600  # Sleep for an hour to keep the containers running
+      # - name: Execute Tests
+      #   run: |
+      #     # Add commands to execute your tests here
+      #     # For example, you can add a sleep command to keep the containers running
+      #     kubectl port-forward svc/web-service 8750:80 -n $NAMESPACE & kubectl port-forward svc/api-service 8700:80 -n $NAMESPACE
+      #     sleep 3600  # Sleep for an hour to keep the containers running
 
-      - name: Cleanup
-        run: |
-          kubectl delete namespace ${{ env.NAMESPACE }} || true  # Use '|| true' to ensure this step always runs
+      # - name: Cleanup
+      #   run: |
+      #     kubectl delete namespace ${{ env.NAMESPACE }} || true  # Use '|| true' to ensure this step always runs

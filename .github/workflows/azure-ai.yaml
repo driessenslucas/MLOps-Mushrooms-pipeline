@@ -283,5 +283,6 @@ jobs:
 
       - name: deploy website and fastapi onto the kubernetes
         run: |
-          kubectl apply -f ./web/deployment.yaml
-          kubectl apply -f ./inference/deployment.yaml
+          NAMESPACE=mushrooms-${GITHUB_RUN_ID}
+          kubectl apply -f ./web/deployment.yaml -n $NAMESPACE
+          kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
