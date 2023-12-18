@@ -251,7 +251,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Set Kubernetes Context && deploy
+      - name: Set Kubernetes Context and Install kubectl
         uses: azure/CLI@v1
         with:
           azcliversion: 2.53.0
@@ -263,5 +263,5 @@ jobs:
         with:
           azcliversion: 2.53.0
           inlineScript: |
-            kubectl apply -f ./inference/deployment.yaml
-            kubectl apply -f ./web/deployment.yaml
+            az aks command invoke -c "kubectl apply -f ./inference/deployment.yaml"
+            az aks command invoke -c "kubectl apply -f ./web/deployment.yaml"
