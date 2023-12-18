@@ -256,8 +256,8 @@ jobs:
         uses: azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: $CLUSTER
-          resource-group: $GROUP
+          cluster-name: ${{ env.CLUSTER }}
+          resource-group: ${{ env.GROUP }}
 
       - name: deploy website and fastapi onto the kubernetes
         run: |
