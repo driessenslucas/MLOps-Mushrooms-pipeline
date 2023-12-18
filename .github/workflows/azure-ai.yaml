@@ -283,5 +283,5 @@ jobs:
 
       - name: deploy website and fastapi onto the kubernetes
         run: |
-          kubectl apply -f ./web/deployment.yaml
-          kubectl apply -f ./inference/deployment.yaml
+          kubectl apply -f ./web/deployment.yaml --overwrite=true
+          kubectl apply -f ./inference/deployment.yaml --overwrite=true

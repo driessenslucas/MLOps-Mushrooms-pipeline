@@ -528,9 +528,8 @@ deploy-kubernetes:
 
       - name: deploy website and fastapi onto the kubernetes
         run: |
-          NAMESPACE=mushrooms-${GITHUB_RUN_ID}
-          kubectl apply -f ./web/deployment.yaml -n $NAMESPACE
-          kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
+          kubectl apply -f ./web/deployment.yaml --overwrite=true
+          kubectl apply -f ./inference/deployment.yaml --overwrite=true
 ```
 
 - to ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
@@ -572,8 +571,8 @@ The key components of my automation strategy include:
 Data Handling: Automating the extraction and preprocessing of data to prepare it for training.
 Model Training: Triggering the training process of the machine learning model with specified parameters.
 Model Evaluation: Systematically evaluating the model performance to ensure it meets our criteria.
-Model Deployment: Seamlessly deploying the trained model to a production environment, making it ready for real-world use.
-Version Control: Integrating version control practices to manage and track different versions of the model, ensuring traceability and accountability.
+Model Deployment: Deploying the model to my GitHub Packages repository for easy access.
+Version Control: Using GitHub Actions to automate the version control of the model.
 ```
 
 In the following sections, I delve into the specifics of each step, illustrating how GitHub Actions enhances our MLOps pipeline's efficiency and robustness.
