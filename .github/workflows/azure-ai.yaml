@@ -257,5 +257,11 @@ jobs:
           azcliversion: 2.53.0
           inlineScript: |
             az aks get-credentials --name mushrooms --resource-group $GROUP
+
+      - name: Deploy to azure
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.53.0
+          inlineScript: |
             kubectl apply -f ./inference/deployment.yaml
             kubectl apply -f ./web/deployment.yaml
