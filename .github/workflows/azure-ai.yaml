@@ -260,7 +260,12 @@ jobs:
     needs: deploy
     # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
     # you will need to have already create a cluster
-    if: ${{ inputs.deploy_kubernetes }}
+    if: ${{
+      (
+      needs.deploy.result == 'success' ||
+      needs.deploy.result == 'skipped'
+      ) &&
+      inputs.deploy_kubernetes }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
