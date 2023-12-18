@@ -36,7 +36,7 @@
     - [5.3 API Endpoints](#53-api-endpoints)
     - [5.4 Web App](#54-web-app)
     - [5.6 Gradio](#56-gradio)
-    - [5.7 deployment on azure kubernetes !!! extra step](#57-deployment-on-azure-kubernetes--extra-step)
+    - [5.7 deployment on azure kubernetes !!! bonus, not necessary](#57-deployment-on-azure-kubernetes--bonus-not-necessary)
   - [6. Integration with Existing Software](#6-integration-with-existing-software)
     - [6.1 fake company](#61-fake-company)
     - [6.1.1 integration in an existing software system](#611-integration-in-an-existing-software-system)
@@ -474,11 +474,13 @@ async def gradio():
 
 <img src="./images/gradio-gui.png" alt="gradio" width="800"/>
 
-### 5.7 deployment on azure kubernetes !!! extra step
+### 5.7 deployment on azure kubernetes !!! bonus, not necessary
 
 Kubernetes Cluster Setup
 
 As I wasn't sure if this was part of the assignment, I added this as a bonus, I deployed the api and the website on azure kubernetes, this was done by adjusting the github actions file.
+
+For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in azure and access the api and website from anywhere (I should probably added some type of auth, but since its only able to upload a picture, it should be fine).
 
 I had to add some new env variables in the github actions file, for this to work:
 
@@ -504,7 +506,7 @@ deploy-kubernetes:
   needs: deploy
   # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
   # you will need to have already create a cluster
-  if: ${{ needs.deploy.result == 'success' || inputs.deploy_kubernetes }}
+  if: ${{ inputs.deploy_kubernetes }}
   runs-on: ubuntu-latest
   steps:
     - name: Check out repository
