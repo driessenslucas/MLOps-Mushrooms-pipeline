@@ -147,7 +147,7 @@ jobs:
   download:
     needs: azure-pipeline
     # Only run if azure-pipeline is succeeded OR skipped
-    if: ${{ needs.azure-pipeline.result == 'success' || needs.azure-pipeline.result == 'skipped'  && inputs.download_model }}
+    if: ${{ ( needs.azure-pipeline.result == 'success' || needs.azure-pipeline.result == 'skipped' ) && inputs.download_model }}
     # runs-on: self-hosted
     runs-on: ubuntu-latest
     steps:
