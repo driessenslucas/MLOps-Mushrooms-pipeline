@@ -28,6 +28,17 @@ on:
         description: 'The name of the compute to start or stop'
         required: true
         default: mlopsfinal
+      download_model:
+        description: 'download the AI model'
+        required: false
+        default: false
+        type: boolean
+      deploy_kubernetes:
+        description: 'deploy the on kubernetes (on azure)'
+        required: false
+        default: false
+        type: boolean
+
     branches:
       - main
   workflow_call:
