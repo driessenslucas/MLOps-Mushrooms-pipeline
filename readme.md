@@ -503,7 +503,7 @@ I had to add some new env variables in the github actions file, for this to work
 
 ```yaml
 deploy-kubernetes:
-  needs: deploy
+  needs: azure-pipeline
   # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
   # you will need to have already create a cluster
   if: ${{ inputs.deploy_kubernetes }}
@@ -528,6 +528,17 @@ deploy-kubernetes:
       run: |
         kubectl apply -f ./web/deployment.yaml
         kubectl apply -f ./inference/deployment.yaml
+```
+
+- to ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
+- the deployment/\*-deployment name is the metadata.name in the deployment.yaml files.
+
+```yaml
+   - name: Update Kubernetes Deployment
+        run: |
+          kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest
+          kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest
+
 ```
 
 ## 6. Integration with Existing Software

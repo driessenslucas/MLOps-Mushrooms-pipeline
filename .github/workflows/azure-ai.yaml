@@ -256,10 +256,13 @@ jobs:
           push: true
           tags: ghcr.io/driessenslucas/mlops-mushrooms-website:latest
 
+      - name: Update Kubernetes Deployment
+        run: |
+          kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest
+          kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest
+
   deploy-kubernetes:
-    needs: deploy
-    # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
-    # you will need to have already create a cluster
+    needs: azure-pipeline
     if: ${{
       (
       needs.deploy.result == 'success' ||
