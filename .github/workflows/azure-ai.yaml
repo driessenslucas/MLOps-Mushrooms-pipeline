@@ -263,12 +263,7 @@ jobs:
 
   deploy-kubernetes:
     needs: azure-pipeline
-    if: ${{
-      (
-      needs.deploy.result == 'success' ||
-      needs.deploy.result == 'skipped'
-      ) &&
-      inputs.deploy_kubernetes }}
+    if: ${{ inputs.deploy_kubernetes }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository

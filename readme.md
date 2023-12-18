@@ -2,6 +2,8 @@
 
 # MLOps Project Report
 
+(side note: I'm sorry if I went overboard with the project and the documentation.... I had a bit too much fun adding stuff once I got the hang of it.)
+
 ## Table of Contents
 
 - [MLOps Project Report](#mlops-project-report)
