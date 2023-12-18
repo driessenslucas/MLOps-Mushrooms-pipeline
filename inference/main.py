@@ -32,47 +32,16 @@ app.add_middleware(
 
 Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-#normally this would be model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
+#normally this would be model_path = os.path.join("mushroom-classification", "INPUT_model_path", "mushroom-cnn")
 #and then model = load_model(model_path)
-#but my regestiation of the model failed, so I added it manually into the model section in azureml, thus you need this for it to work
+#but my regestiation of the model failed the second time around, so I added the model manually into the model registry in azure ml, thus you need this for it to work
 model = load_model('./mushroom-classification/mushroom-cnn')
 
-##old gradio implementation
-
-# # Function to make predictions using the loaded model
-# def predict(image):
-#     original_image = image
-#     original_image = original_image.resize((400, 400))
-#     images_to_predict = np.expand_dims(np.array(original_image), axis=0)
-#     predictions = model.predict(images_to_predict)
-#     classifications = predictions.argmax(axis=1)
-    
-#     # Print certainty of all classes
-#     print(predictions)
-
-#     return f'{Mushrooms[classifications.tolist()[0]]}'
-
-# # Gradio Interface for Mushroom Prediction
-# iface = gr.Interface(
-#     fn=predict, 
-#     inputs=gr.Image(type='pil', label='Take a Picture'),
-#     outputs='text',
-#     live=True
-# )
 
 
 async def gradio():
     # implement gradio
     with gr.Blocks() as demo:
-        # Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
-
-        # # model_path = os.path.join("mushroom-cnn")
-        # # print(model_path)
-        
-        # #normally this would be model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
-        # #and then model = load_model(model_path)
-        # #but my regestiation of the model failed, so I added it manually into the model section in azureml, thus you need this for it to work
-        # model = load_model('./mushroom-classification/mushroom-cnn')
 
         # Function to make predictions using the loaded model
         def predict(image):

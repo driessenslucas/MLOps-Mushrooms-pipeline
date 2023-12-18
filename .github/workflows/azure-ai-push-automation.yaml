@@ -13,6 +13,8 @@ jobs:
       create_compute: false
       train_model: false
       skip_training_pipeline: true
-      download_model: false
       deploy_model: false
+      download_model: false
+      deploy_kubernetes: true
+
     secrets: inherit

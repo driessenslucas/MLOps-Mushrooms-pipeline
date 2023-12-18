@@ -47,13 +47,18 @@ on:
         required: false
         default: true
         type: boolean
+      deploy_model:
+        description: 'Deploy the AI model onto local Kubernetes cluster'
+        required: false
+        default: false
+        type: boolean
       download_model:
         description: 'download the AI model'
         required: false
         default: false
         type: boolean
-      deploy_model:
-        description: 'Deploy the AI model onto local Kubernetes cluster'
+      deploy_kubernetes:
+        description: 'deploy the on kubernetes (on azure)'
         required: false
         default: false
         type: boolean
@@ -67,7 +72,8 @@ env:
   TRAIN_MODEL: ${{ github.event.inputs.train_model }}
   SKIP_TRAINING_PIPELINE: ${{ github.event.inputs.skip_training_pipeline }}
   DEPLOY_MODEL: ${{ github.event.inputs.deploy_model }}
-  DOWNLOAD_MODEL: ${{ github.event.input.download_model }}
+  DOWNLOAD_MODEL: ${{ github.event.inputs.download_model }}
+  DEPLOY_KUBERNETES: ${{ github.event.inputs.deploy_kubernetes }}
 
 jobs:
   azure-pipeline:
@@ -141,7 +147,7 @@ jobs:
   download:
     needs: azure-pipeline
     # Only run if azure-pipeline is succeeded OR skipped
-    if: ${{ needs.azure-pipeline.result == 'success' || needs.azure-pipeline.result == 'skipped'  && inputs.download_model }}
+    if: ${{ needs.azure-pipeline.result == 'success'  && inputs.download_model }}
     # runs-on: self-hosted
     runs-on: ubuntu-latest
     steps:
@@ -186,15 +192,8 @@ jobs:
         id: docker-meta-data
         uses: docker/metadata-action@v3
         with:
-          # list of Docker images to use as base name for tags
-          # Use this for Docker Hub
-          # nathansegers/mlops-mushrooms-api
           images: |
             ghcr.io/driessenslucas/mlops-mushrooms-api
-          # generate Docker tags based on the following events/attributes:
-          # The GitHub Branch
-          # The GitHub SHA
-          # More info: https://github.com/docker/build-push-action/blob/master/docs/advanced/tags-labels.md
 
       # Enter your GITHUB Token here!
       - name: Login to GHCR
@@ -225,3 +224,35 @@ jobs:
           context: ./web
           push: false
           tags: ghcr.io/driessenslucas/mlops-mushrooms-website:latest
+
+  deploy-kubernetes:
+    needs: deploy
+    # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
+    # you will need to have already create a cluster
+    if: ${{
+      (
+      needs.deploy.result == 'success' ||
+      needs.deploy.result == 'skipped'
+      ) &&
+      inputs.deploy_kubernetes }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set Kubernetes Context
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.53.0
+          inlineScript: |
+            az aks get-credentials --name mushrooms --resource-group $GROUP
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f ./inference/deployment.yaml && kubectl apply -f ./inference/service.yaml
+          kubectl apply -f ./web/deployment.yaml && kubectl apply -f ./web/service.yaml
