@@ -38,6 +38,11 @@ on:
         required: false
         default: false
         type: boolean
+      create_cluster:
+        description: 'create kubernetes cluster (on azure)'
+        required: false
+        default: false
+        type: boolean
 
     branches:
       - main
@@ -73,7 +78,11 @@ on:
         required: false
         default: false
         type: boolean
-
+      create_cluster:
+        description: 'create kubernetes cluster (on azure)'
+        required: false
+        default: false
+        type: boolean
 env:
   GROUP: MLOps
   CLUSTER: mushrooms
@@ -86,6 +95,7 @@ env:
   DEPLOY_MODEL: ${{ github.event.inputs.deploy_model }}
   DOWNLOAD_MODEL: ${{ github.event.inputs.download_model }}
   DEPLOY_KUBERNETES: ${{ github.event.inputs.deploy_kubernetes }}
+  CREATE_CLUSTER: ${{ github.event.inputs.create_cluster }}
 
 jobs:
   azure-pipeline:
@@ -121,6 +131,15 @@ jobs:
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
             az ml compute create --file ./environment/compute.yaml
+
+      - name: Create Kubernetes cluster
+        uses: azure/CLI@v1
+        id: prepare-kubernetes-cluster
+        if: ${{ inputs.create_cluster }}
+        with:
+          azcliversion: 2.53.0
+          inlineScript: |
+            az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons monitoring --enable-msi-auth-for-monitoring --generate-ssh-keys
 
       - name: Start compute
         uses: azure/CLI@v1
@@ -238,10 +257,10 @@ jobs:
           tags: ghcr.io/driessenslucas/mlops-mushrooms-website:latest
 
   deploy-kubernetes:
-    needs: azure-pipeline
+    needs: deploy
     # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
     # you will need to have already create a cluster
-    if: ${{ inputs.deploy_kubernetes }}
+    if: ${{ needs.deploy.result == 'success' || inputs.deploy_kubernetes }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -263,7 +282,3 @@ jobs:
         run: |
           kubectl apply -f ./web/deployment.yaml
           kubectl apply -f ./inference/deployment.yaml
-
-      - name: ☸ tye deploy
-        run: |
-          tye deploy -v Debug

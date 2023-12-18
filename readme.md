@@ -36,6 +36,7 @@
     - [5.3 API Endpoints](#53-api-endpoints)
     - [5.4 Web App](#54-web-app)
     - [5.6 Gradio](#56-gradio)
+    - [5.7 deployment on azure kubernetes !!! extra step](#57-deployment-on-azure-kubernetes--extra-step)
   - [6. Integration with Existing Software](#6-integration-with-existing-software)
     - [6.1 fake company](#61-fake-company)
     - [6.1.1 integration in an existing software system](#611-integration-in-an-existing-software-system)
@@ -473,6 +474,60 @@ async def gradio():
 
 <img src="./images/gradio-gui.png" alt="gradio" width="800"/>
 
+### 5.7 deployment on azure kubernetes !!! extra step
+
+Kubernetes Cluster Setup
+
+As I wasn't sure if this was part of the assignment, I added this as a bonus, I deployed the api and the website on azure kubernetes, this was done by adjusting the github actions file.
+
+I had to add some new env variables in the github actions file, for this to work:
+
+<img src="./images/clusterenv.png" alt="update actions env" width="400"/>
+
+- I then added a new step in the azure-pipeline job:
+
+```yaml
+- name: Create Kubernetes cluster
+  uses: azure/CLI@v1
+  id: prepare-kubernetes-cluster
+  if: ${{ inputs.create_cluster }}
+  with:
+    azcliversion: 2.53.0
+    inlineScript: |
+      az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons monitoring --enable-msi-auth-for-monitoring --generate-ssh-keys
+```
+
+- And also added a new job responsible for deploying the api and the website on the kubernetes cluster:
+
+```yaml
+deploy-kubernetes:
+  needs: deploy
+  # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
+  # you will need to have already create a cluster
+  if: ${{ needs.deploy.result == 'success' || inputs.deploy_kubernetes }}
+  runs-on: ubuntu-latest
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set AKS context
+      uses: azure/aks-set-context@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        cluster-name: ${{ env.CLUSTER }}
+        resource-group: ${{ env.GROUP }}
+
+    - name: deploy website and fastapi onto the kubernetes
+      run: |
+        kubectl apply -f ./web/deployment.yaml
+        kubectl apply -f ./inference/deployment.yaml
+```
+
 ## 6. Integration with Existing Software
 
 In a practical scenario, this MLOps pipeline is ready to be integrated into an existing software system.
@@ -628,6 +683,7 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 - how to use github secrets <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>
 - how to create azure service principle to access azure services: <https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash>
 - kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
+- create a Kubernetes cluster in azure azk: <https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli>
 
 ## demos
 

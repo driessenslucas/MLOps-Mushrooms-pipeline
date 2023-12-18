@@ -16,5 +16,6 @@ jobs:
       deploy_model: false
       download_model: false
       deploy_kubernetes: true
+      create_cluster: false
 
     secrets: inherit
