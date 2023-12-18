@@ -263,5 +263,5 @@ jobs:
         with:
           azcliversion: 2.53.0
           inlineScript: |
-            az aks command invoke -c "kubectl apply -f ./inference/deployment.yaml"
-            az aks command invoke -c "kubectl apply -f ./web/deployment.yaml"
+            az aks command invoke -c "kubectl apply -f ./inference/deployment.yaml" --resource-group $GROUP
+            az aks command invoke -c "kubectl apply -f ./web/deployment.yaml" --resource-group $GROUP
