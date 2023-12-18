@@ -480,6 +480,12 @@ async def gradio():
 
 Kubernetes Cluster Setup
 
+**note:this isnt completly working since I'm limited in public ip's that azure will give me**
+
+**solution: using a private azure kubernetes cluster and a vm --> so I can access them (I won't update the documentation about this, because the goal was to use public ip's anyways**
+
+**but you should add this at the end of the creation command: az aks create .... --enable-private-cluster\***
+
 As I wasn't sure if this was part of the assignment, I added this as a bonus, I deployed the api and the website on azure kubernetes, this was done by adjusting the github actions file.
 
 For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in azure and access the api and website from anywhere (I should probably added some type of auth, but since its only able to upload a picture, it should be fine).

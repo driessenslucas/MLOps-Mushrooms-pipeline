@@ -139,7 +139,7 @@ jobs:
         with:
           azcliversion: 2.53.0
           inlineScript: |
-            az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons monitoring --enable-msi-auth-for-monitoring --generate-ssh-keys
+            az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons http_application_routing monitoring --enable-msi-auth-for-monitoring --generate-ssh-keys
 
       - name: Start compute
         uses: azure/CLI@v1
