@@ -85,7 +85,7 @@ on:
         type: boolean
 env:
   GROUP: MLOps
-  CLUSTER: mushroomcluster
+  CLUSTER: mushrooms
   WORKSPACE: lucasmlops
   LOCATION: westeurope
   # Allow to override for each run, in the workflow dispatch manual starts
