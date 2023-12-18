@@ -24,7 +24,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Agaricus/ # Update the path based on your dataset
+        path: azureml:agaricus:1
     outputs:
       output_data:
         mode: rw_mount
@@ -35,7 +35,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Amanita/
+        path: azureml:amanita:1
     outputs:
       output_data:
         mode: rw_mount
@@ -46,7 +46,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Boletus/
+        path: azureml:boletus:1
     outputs:
       output_data:
         mode: rw_mount
@@ -57,7 +57,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Cortinarius/
+        path: azureml:cortinarius:1
     outputs:
       output_data:
         mode: rw_mount
@@ -68,7 +68,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Entoloma/
+        path: azureml:entoloma:1
     outputs:
       output_data:
         mode: rw_mount
@@ -79,7 +79,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Hygrocybe/
+        path: azureml:hygrocybe:1
     outputs:
       output_data:
         mode: rw_mount
@@ -90,7 +90,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Lactarius/
+        path: azureml:lactarius:1
     outputs:
       output_data:
         mode: rw_mount
@@ -101,7 +101,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Russula/
+        path: azureml:russula:1
     outputs:
       output_data:
         mode: rw_mount
@@ -112,7 +112,7 @@ jobs:
     inputs:
       data:
         type: uri_folder
-        path: azureml://subscriptions/64410333-3fd9-440d-b9cd-d67e265e6a8c/resourcegroups/MLOps/workspaces/lucasmlops/datastores/workspaceblobstore/paths/UI/2023-12-09_200006_UTC/Mushrooms/Suillus/ # Update the path based on your dataset
+        path: azureml:suillus:1
     outputs:
       output_data:
         mode: rw_mount

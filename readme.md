@@ -39,6 +39,7 @@
     - [5.4 Web App](#54-web-app)
     - [5.6 Gradio](#56-gradio)
     - [5.7 deployment on azure kubernetes !!! bonus, not necessary](#57-deployment-on-azure-kubernetes--bonus-not-necessary)
+      - [This step was in my eyes the whole point of this assignment, creating a full pipeline from data to webapp, that is fully automated and deployed on a kubernetes cluster](#this-step-was-in-my-eyes-the-whole-point-of-this-assignment-creating-a-full-pipeline-from-data-to-webapp-that-is-fully-automated-and-deployed-on-a-kubernetes-cluster)
   - [6. Integration with Existing Software](#6-integration-with-existing-software)
     - [6.1 fake company](#61-fake-company)
     - [6.1.1 integration in an existing software system](#611-integration-in-an-existing-software-system)
@@ -78,6 +79,8 @@ The dataset I used:
 #### 2.1.1 Data upload
 
 I manually uploaded the data onto azure ml for this project.
+
+<img src="./images/created_data.png" alt="dataset" width="400"/>
 
 ### 2.2 AI Model Selection
 
@@ -478,6 +481,8 @@ async def gradio():
 
 ### 5.7 deployment on azure kubernetes !!! bonus, not necessary
 
+#### This step was in my eyes the whole point of this assignment, creating a full pipeline from data to webapp, that is fully automated and deployed on a kubernetes cluster
+
 Kubernetes Cluster Setup
 
 **note:this has been barely tested since I'm limited in public ip's that azure will give me**
@@ -530,8 +535,8 @@ deploy-kubernetes:
 
       - name: deploy website and fastapi onto the kubernetes
         run: |
-          kubectl apply -f ./web/deployment.yaml --overwrite=true
-          kubectl apply -f ./inference/deployment.yaml --overwrite=true
+          kubectl apply -f ./web/deployment.yaml
+          kubectl apply -f ./inference/deployment.yaml
 ```
 
 - to ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
@@ -544,6 +549,12 @@ deploy-kubernetes:
           kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest
 
 ```
+
+- proof of working (look at the ip's):
+
+<img src="./images/azure-clusters.png" alt="services" width="800"/>
+<img src="./images/webapp-on-azure.png" alt="website" width="800"/>
+<img src="./images/fastapi-on-azure.png" alt="api" width="800"/>
 
 ## 6. Integration with Existing Software
 
@@ -588,7 +599,7 @@ It triggers a pipeline that goes the whole process of data extraction, preproces
 <p>here you can set the environment variables for the pipeline, chosing if you want to       create_compute, train_model, skip_training_pipeline, download_model or deploy_model
 these allow for a more flexible pipeline, where you can choose to skip certain steps.
 since you dont need to recreate the compute or train the model each time you want to redeploy it.</p>
-<img src="./images/pipeline_start.png" alt="github actions" width="800"/>
+<img src="./images/pipline-start.png" alt="github actions" width="800"/>
 
 #### jobs
 
