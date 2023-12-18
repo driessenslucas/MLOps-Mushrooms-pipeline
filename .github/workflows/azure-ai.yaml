@@ -281,12 +281,7 @@ jobs:
           cluster-name: ${{ env.CLUSTER }}
           resource-group: ${{ env.GROUP }}
 
-      - name: create and set namespace
-        run: |
-          NAMESPACE=mushrooms-${GITHUB_RUN_ID}
-          kubectl create namespace $NAMESPACE
-
       - name: deploy website and fastapi onto the kubernetes
         run: |
-          kubectl apply -f ./web/deployment.yaml -n $NAMESPACE
-          kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
+          kubectl apply -f ./web/deployment.yaml
+          kubectl apply -f ./inference/deployment.yaml
