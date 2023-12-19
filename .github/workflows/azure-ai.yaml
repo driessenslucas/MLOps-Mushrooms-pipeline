@@ -266,7 +266,7 @@ jobs:
         uses: azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster: ${{ env.CLUSTER }}
+          cluster-name: ${{ env.CLUSTER }}
           resource-group: ${{ env.GROUP }}
 
       - name: Create Namespace or check namespace
