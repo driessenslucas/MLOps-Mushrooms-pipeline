@@ -279,7 +279,7 @@ jobs:
           kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest -n $NAMESPACE
 
   deploy-kubernetes:
-    needs: azure-pipeline
+    needs: deploy
     if: ${{ inputs.deploy_kubernetes }}
     runs-on: ubuntu-latest
     steps:
