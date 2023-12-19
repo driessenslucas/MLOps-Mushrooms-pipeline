@@ -262,6 +262,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # to use azure cluster
       - name: set AKS aks-set-context
         uses: azure/aks-set-context@v1
         with:

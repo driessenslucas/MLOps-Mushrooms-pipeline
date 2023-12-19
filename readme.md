@@ -16,7 +16,7 @@
       - [2.2.1 Model decision](#221-model-decision)
     - [2.3 Data Preprocessing](#23-data-preprocessing)
       - [2.3.1 Data preparation for this specific dataset (done outside of the pipeline)](#231-data-preparation-for-this-specific-dataset-done-outside-of-the-pipeline)
-      - [2.3.2 Data prep in the pipeline](#232-data-prep-in-the-pipeline)
+      - [2.3.2 Data prep before training](#232-data-prep-before-training)
       - [2.3.3 Target Label Extraction](#233-target-label-extraction)
       - [2.3.4 label Encoding](#234-label-encoding)
       - [2.3.5 feature Extraction](#235-feature-extraction)
@@ -75,6 +75,10 @@ The dataset I used:
 <https://www.kaggle.com/datasets/lizhecheng/mushroom-classification>
 
 <img src="./images/kaggle.png" alt="dataset" width="1000"/>
+
+the data set contains images like this:
+
+<img src="./images/Entoloma_028.jpg" alt="dataset" width="400"/>
 
 #### 2.1.1 Data upload
 
@@ -142,7 +146,7 @@ for x in sorted(os.listdir(path)):
       os.rename(path+x+'/'+y, path+x+'/'+name)
 ```
 
-#### 2.3.2 Data prep in the pipeline
+#### 2.3.2 Data prep before training
 
 this resizes the images to 400x400, and saves them in the output directory.
 
@@ -293,6 +297,13 @@ Compute resources were created and managed within Azure ML. This included settin
 Azure ML enabled the creation and management of environments for the project. Specifically, environment configurations for libraries like Pillow and TensorFlow that were defined in separate YAML files, found in the ./environments directory. I didn't use the compute.yaml, since I made my own computing cluster. The rest of the environments I did create and use.
 
 <summary><b>Environments</b></summary>
+
+create with this command:
+
+```yaml
+az ml environment create --file my_env.yml --resource-group my-resource-group --workspace-name my-workspace
+where file is these files:
+```
 
 **_pillow_**
 <img src="./images/pillow.png" alt="pillow env" width="800"/>
@@ -591,9 +602,9 @@ fastapi endpoints.... so there isnt much to it, you could deploy the api to a co
 
 ## 7. Automation and Version Control
 
-In this project, automation and version control are not just conveniences but necessities for ensuring efficiency and consistency throughout the machine learning lifecycle. To achieve this, I leveraged the power of GitHub Actions, a robust platform for automating workflows, which plays a pivotal role in our project. GitHub Actions allows for the orchestration of various tasks, from data handling to model training and deployment, all triggered by specific GitHub events like code commits or pull requests.
+In this project I mainly used GitHub Actionsm which allows for the orchestration of various tasks, from data handling to model training and deployment, all triggered by specific GitHub events like code commits.
 
-Automation and version control are integral to maintaining an efficient MLOps pipeline. GitHub Actions played a pivotal role in automating various aspects of the project.
+Automation and version control are found all over my MLOps pipeline.
 The key components of my automation strategy include:
 
 ```yaml

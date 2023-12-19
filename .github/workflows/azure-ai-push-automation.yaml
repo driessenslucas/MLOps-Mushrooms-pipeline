@@ -11,11 +11,11 @@ jobs:
     with:
       # Set these to "true" if you want to run these pipeline steps or "false" to skip it
       create_compute: false
-      train_model: false
-      skip_training_pipeline: true
-      deploy_model: true
-      download_model: true
-      deploy_kubernetes: true
       create_cluster: false
+      train_model: false
+      skip_training_pipeline: true #default is false, true skips this step
+      download_model: false
+      deploy_model: false
+      deploy_kubernetes: false
 
     secrets: inherit
