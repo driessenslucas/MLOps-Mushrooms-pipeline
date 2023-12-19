@@ -491,9 +491,24 @@ As I wasn't sure if this was part of the assignment, I added this as a bonus, I 
 
 For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in azure and access the api and website from anywhere (I should probably added some type of auth, but since its only able to upload a picture, it should be fine).
 
-I had to add some new env variables in the github actions file, for this to work:
+I had to add some new env variables in the github actions file, for this to work (this is the full updated env section):
 
-<img src="./images/clusterenv.png" alt="update actions env" width="400"/>
+```yaml
+env:
+  NAMESPACE: mushroomspace
+  GROUP: MLOps
+  CLUSTER: mushrooms
+  WORKSPACE: lucasmlops
+  LOCATION: westeurope
+  # Allow to override for each run, in the workflow dispatch manual starts
+  CREATE_COMPUTE: ${{ github.event.inputs.create_compute }}
+  TRAIN_MODEL: ${{ github.event.inputs.train_model }}
+  SKIP_TRAINING_PIPELINE: ${{ github.event.inputs.skip_training_pipeline }}
+  DEPLOY_MODEL: ${{ github.event.inputs.deploy_model }}
+  DOWNLOAD_MODEL: ${{ github.event.inputs.download_model }}
+  DEPLOY_KUBERNETES: ${{ github.event.inputs.deploy_kubernetes }}
+  CREATE_CLUSTER: ${{ github.event.inputs.create_cluster }}
+```
 
 - I then added a new step in the azure-pipeline job:
 
@@ -512,9 +527,7 @@ I had to add some new env variables in the github actions file, for this to work
 
 ```yaml
 deploy-kubernetes:
-  needs: azure-pipeline
-  # Only run if deploy is succeeded OR skipped AND if the deploy_kubernetes variable is true
-  # you will need to have already create a cluster
+  needs: deploy
   if: ${{ inputs.deploy_kubernetes }}
   runs-on: ubuntu-latest
   steps:
@@ -533,21 +546,24 @@ deploy-kubernetes:
         cluster-name: ${{ env.CLUSTER }}
         resource-group: ${{ env.GROUP }}
 
-      - name: deploy website and fastapi onto the kubernetes
-        run: |
-          kubectl apply -f ./web/deployment.yaml
-          kubectl apply -f ./inference/deployment.yaml
+    - name: Create Namespace or check namespace
+      run: |
+        kubectl create namespace $NAMESPACE || echo "namespace already exists"
+
+    - name: deploy website and fastapi onto the kubernetes
+      run: |
+        kubectl apply -f ./web/deployment.yaml -n $NAMESPACE
+        kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
 ```
 
 - to ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
 - the deployment/\*-deployment name is the metadata.name in the deployment.yaml files.
 
 ```yaml
-   - name: Update Kubernetes Deployment
-        run: |
-          kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest
-          kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest
-
+- name: Update Kubernetes Deployment
+  run: |
+    kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest -n $NAMESPACE
+    kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest -n $NAMESPACE
 ```
 
 - proof of working (look at the ip's):
