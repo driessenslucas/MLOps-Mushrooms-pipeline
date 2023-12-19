@@ -84,6 +84,7 @@ on:
         default: false
         type: boolean
 env:
+  NAMESPACE: mushroomspace
   GROUP: MLOps
   CLUSTER: mushrooms
   WORKSPACE: lucasmlops
@@ -256,10 +257,26 @@ jobs:
           push: true
           tags: ghcr.io/driessenslucas/mlops-mushrooms-website:latest
 
+      - name: Azure login
+        uses: azure/login@V1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: set AKS aks-set-context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster: ${{ env.CLUSTER }}
+          resource-group: ${{ env.GROUP }}
+
+      - name: Create Namespace or check namespace
+        run: |
+          kubectl create namespace $NAMESPACE || echo "namespace already exists"
+
       - name: Update Kubernetes Deployment
         run: |
-          kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest
-          kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest
+          kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest -n $NAMESPACE
+          kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest -n $NAMESPACE
 
   deploy-kubernetes:
     needs: azure-pipeline
@@ -281,7 +298,11 @@ jobs:
           cluster-name: ${{ env.CLUSTER }}
           resource-group: ${{ env.GROUP }}
 
+      - name: Create Namespace or check namespace
+        run: |
+          kubectl create namespace $NAMESPACE || echo "namespace already exists"
+
       - name: deploy website and fastapi onto the kubernetes
         run: |
-          kubectl apply -f ./web/deployment.yaml 
-          kubectl apply -f ./inference/deployment.yaml
+          kubectl apply -f ./web/deployment.yaml -n $NAMESPACE
+          kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
