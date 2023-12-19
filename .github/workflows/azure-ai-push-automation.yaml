@@ -13,8 +13,8 @@ jobs:
       create_compute: false
       train_model: false
       skip_training_pipeline: true
-      deploy_model: false
-      download_model: false
+      deploy_model: true
+      download_model: true
       deploy_kubernetes: true
       create_cluster: false
 
