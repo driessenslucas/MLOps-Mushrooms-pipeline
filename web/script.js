@@ -104,8 +104,8 @@ classifyButton.addEventListener('click', function () {
 			formData.append('img', blob, 'image.png');
 
 			// Send the image file to the FastAPI server
-			// when running on localhost use http://localhost:8700/upload/image, but when deployed use http://api-service:80/upload/image
-			fetch('http://api-service:80/upload/image', {
+			// you will need to change this to the ip of your api service (possible use ingress to make it easier)
+			fetch('http://51.105.202.206/upload/image', {
 				method: 'POST',
 				body: formData,
 			})

@@ -42,14 +42,14 @@
     - [5.3 API Endpoints](#53-api-endpoints)
     - [5.4 Web App](#54-web-app)
     - [5.6 Gradio](#56-gradio)
-    - [5.7 Deployment on azure kubernetes !!! (bonus)](#57-deployment-on-azure-kubernetes--bonus)
+    - [5.7 Deployment on Azure kubernetes !!! (bonus)](#57-deployment-on-azure-kubernetes--bonus)
   - [6. Integration with Existing Software](#6-integration-with-existing-software)
     - [6.1 Fake company](#61-fake-company)
     - [6.1.1 Integration in an existing software system](#611-integration-in-an-existing-software-system)
   - [7. Automation and Version Control](#7-automation-and-version-control)
     - [7.1 GitHub Actions](#71-github-actions)
     - [Jobs](#jobs)
-    - [test job](#test-job)
+    - [Test job](#test-job)
     - [7.2 Version Control](#72-version-control)
     - [7.2.1 Training model version](#721-training-model-version)
     - [7.2.2 Model Version Retrieval](#722-model-version-retrieval)
@@ -84,7 +84,7 @@ The dataset contains images like this:
 
 ### 2.1.1 Data upload
 
-I manually uploaded the folders onto azure ml data assets for this project.
+I manually uploaded the folders onto Azure ML data assets for this project.
 ![dataset](./images/created_data.png){ width=400px }
 
 ### 2.2 AI Model Selection: VGG19 with Transfer Learning
@@ -240,7 +240,7 @@ repo_token: A GitHub token with necessary permissions for actions such as pushin
 
 ### Getting Started
 
-> !!! Make sure you have the necessary permissions and configurations set up in your Azure ML workspace and github repository. !!!
+> !!! Make sure you have the necessary permissions and configurations set up in your Azure ML workspace and Github repository. !!!
 
 You will need to go into the pipelines folder and change what you need for your specific use case, adding your own image/data paths.
 
@@ -248,7 +248,7 @@ Same thing with the components folder, you will need to adjust the model and the
 
 ## 3. Cloud AI Services
 
-Azure Machine Learning Service was utilized extensively throughout the project. Azure ML provided a powerful platform for managing the entire MLOps pipeline, from data preparation to model registration. (It took a while to get used to working with azure ml, but once I got the hang of it, it was nice to see all the possibilities it offers)
+Azure Machine Learning Service was utilized extensively throughout the project. Azure ML provided a powerful platform for managing the entire MLOps pipeline, from data preparation to model registration. (It took a while to get used to working with Azure ML, but once I got the hang of it, it was nice to see all the possibilities it offers)
 
 ### 3.1 Compute Resource Management
 
@@ -282,7 +282,7 @@ This section outlines the steps involved in training and evaluating the machine 
 
 ### 4.1 Azure ML
 
-here is an overview of the pipeline I created in azure ml:
+Here is an overview of the pipeline I created in Azure ML:
 ![azureml](./images/Classification_job.png){ width=600px }
 
 ### 4.2 Model Training
@@ -325,9 +325,9 @@ The performance of the trained model was evaluated using various metrics, includ
 
 ### 4.3.1 conclusions
 
-The model is performing pretty okay considering I only had around 259 images for 2 of the classes, my dataset wasnt balanced at all. (Adding data augmentation helped a lot with this)
+The model is performing pretty okay considering I only had around 259 images for 2 of the classes, my dataset wasn't balanced at all. (Adding data augmentation helped a lot with this)
 
-And the training already took 5hours, so It wasn't really feasible to add more data in my case, given the time frame of this project (and limited money resources).
+And the training already took 5 hours, so It wasn't really feasible to add more data in my case, given the time frame of this project (and limited money resources).
 
 ## 5. Deployment
 
@@ -335,7 +335,7 @@ We were tasked with deploying a fastapi. I also added a webapp and a gradio gui 
 
 ### 5.1 Fastapi Deployment
 
-The trained model is integrated into a fastapi, which Is then build into a docker image and then finally that image is then pushed to my github packages repo.
+The trained model is integrated into a fastapi, which Is then build into a docker image and then finally that image is then pushed to my Github packages repo.
 
 I later use this docker image to deploy the api on kubernetes.
 
@@ -352,8 +352,9 @@ Deployment and service file for the fastapi
 
 ### 5.4 Web App
 
-This simple web app creates a fun and interactive way to test the finished product, its made to do an api request with an uploaded image, based on the result it will display some information about the mushroom. (I added text to speech to spice it up a bit)
+This simple web app creates a fun and interactive way to test the finished product, it's made to do an api request with an uploaded image, based on the result it will display some information about the mushroom. (I added text to speech to spice it up a bit)
 
+You could think the ip should be made to the api-service, but javascript does a server based request and not a client based request, so it should always be a request to the ip of the api itself. (with port-forwarding or a loadbalancer)
 In the code snippet below you can see how the api call is done.
 
 ```js
@@ -368,8 +369,9 @@ classifyButton.addEventListener('click', function () {
 			const formData = new FormData();
 			formData.append('img', blob, 'image.png');
 
-			// Send the image file to the FastAPI server
-			fetch('http://api-service:80/upload/image', {
+			// Send the image file to the FastAPI server.
+			/// you will need to change this to the ip of your api service (possible it will be http://localhost:80/upload/image) (my api is running on 51.105.202.206)
+			fetch('http://51.105.202.206/upload/image', {
 				method: 'POST',
 				body: formData,
 			})
@@ -439,19 +441,19 @@ async def gradio():
     app = gr.mount_gradio_app(app, demo, '/gradio')
 ```
 
-### 5.7 Deployment on azure kubernetes !!! (bonus)
+### 5.7 Deployment on Azure kubernetes !!! (bonus)
 
 > This step was in my eyes the whole point of this assignment, creating a full pipeline from data to webapp, that is fully automated and deployed on a kubernetes cluster
 
 Kubernetes Cluster Setup
 
-**note:this has been barely tested since I'm limited in public ip's that azure will give me**
+**note:this has been barely tested since I'm limited in public ip's that Azure will give me**
 
-I added this as a bonus, I deployed the api and the website on azure kubernetes (instead of on my own machine), this was done by adjusting the github actions file.
+I added this as a bonus, I deployed the api and the website on Azure kubernetes (instead of on my own machine), this was done by adjusting the Github actions file.
 
-For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in azure and access the api and website from anywhere. Adding some form of authentication might be advisable, but considering the limited functionality restricted to uploading only pictures, it should be sufficient without it.
+For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in Azure and access the api and website from anywhere. Adding some form of authentication might be advisable, but considering the limited functionality restricted to uploading only pictures, it should be sufficient without it.
 
-I had to add some new env variables in the github actions file for this to work (this is the full updated env section):
+I had to add some new env variables in the Github actions file for this to work (this is the full updated env section):
 
 ```yaml
 env:
@@ -516,7 +518,7 @@ deploy-kubernetes:
         kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
 ```
 
-To ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
+To ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the Github packages repo)
 
 The deployment/\*-deployment name is the metadata.name in the deployment.yaml files.
 
@@ -527,10 +529,10 @@ The deployment/\*-deployment name is the metadata.name in the deployment.yaml fi
     kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest -n $NAMESPACE
 ```
 
-- if you look at the api's you can see that it is working:
-  ![services](./images/azure-clusters.png){ width=600px }
-  ![website](./images/webapp-on-azure.png){ width=600px }
-  ![api](./images/fastapi-on-azure.png){ width=600px }
+- If you look at the api's you can see that it is working:
+  ![services](./images_updated/cloud-ips.png){ width=600px }
+  ![website](./images_updated/cloud-webapp.png){ width=600px }
+  ![api](./images_updated/cloud-api.png){ width=600px }
 
 ## 6. Integration with Existing Software
 
@@ -545,7 +547,7 @@ If there was a better more in depth dataset this could even be used to classify 
 ### 6.1.1 Integration in an existing software system
 
 When you want to integrate this you just need to do an api call to the
-fastapi endpoints.... So there isnt much to it, you could deploy the api to a container app in azure for example. Or in a cloud kube cluster, like I did as a bonus.
+fastapi endpoints.... So there isn't much to it, you could deploy the api to a container app in Azure for example. Or in a cloud kube cluster, like I did as a bonus.
 
 ## 7. Automation and Version Control
 
@@ -566,47 +568,48 @@ In the following sections, I delve into the specifics of each step, illustrating
 
 ### 7.1 GitHub Actions
 
-I used github actions to automate the training and deployment of the model. The workflow is defined in the .github/workflows directory.
-It triggers a pipeline that goes the whole process of data extraction, preprocessing, training, evaluation, and deployment. each directory has its own yaml file for this.
+I used Github actions to automate the training and deployment of the model. The workflow is defined in the .github/workflows directory.
+It triggers a pipeline that goes the whole process of data extraction, preprocessing, training, evaluation, and deployment. Each directory has its own yaml file for this.
 
 ![github actions](./images/githubworkflow.png){ width=600px }
 
 Pipeline start
 
-Here you can set the environment variables for the pipeline, chosing if you want to create_compute, train_model, skip_training_pipeline, download_model or deploy_model
-these allow for a more flexible pipeline, where you can choose to skip certain steps.
-since you dont need to recreate the compute or train the model each time you want to redeploy it.
+Here you can set the environment variables for the pipeline, choosing if you want to create_compute, train_model, skip_training_pipeline, download_model or deploy_model these allow for a more flexible pipeline, where you can choose to skip certain steps.
+Since you don't need to recreate the compute or train the model each time you want to redeploy it.
 ![github actions](./images/pipline-start.png){ width=600px }
 
 ### Jobs
 
-azure cli:
+Azure CLI:
 
-This job will login and create and/or start the compute cluster. and start the training pipeline if selected (./pipelines/mushroom-classification.yaml).
+This job will login and create and/or start the compute cluster, and start the training pipeline if selected (./pipelines/mushroom-classification.yaml).
 ![github actions](./images/azure-cli-job.png){ width=600px }
 
-download model:
+Download model:
 
-This will download the registred model from azure ml and save it in the ./inference directory.
+This will download the registred model from Azure ML and save it in the ./inference directory.
 ![github actions](./images/download-job.png){ width=600px }
 
-deploy model:
+Deploy model:
 
-This will deploy the docker files to the github packages repo
+This will deploy the docker files to the Github packages repo.
 ![github actions](./images/deploy-job.png){ width=600px }
 
-### test job
+### Test job
+
+> note: after adding azure kuberenetes only the api and gradio will work. To make the web app work you will need to change the ip in the script.js file to the ip of the api servive you port forwarded to, and then rebuild the docker image. (or alternativly run it locally with the docker compose.)
 
 Testing file:
 
-(This will require a local github actions runner)
+(This will require a local Github actions runner)
 This will deploy the api and the website on kuberenetes. It will create a new namespace and then port forward both the api and the website to the localhost, allowing the user to explore.
 After testing is done it removes the namespace and all the containing services.
 ![github actions](./images/test-job.png){ width=600px }
 
 ### 7.2 Version Control
 
-Version control is mandatory for any project, but especially when wanting to create a pipeline that can be used in a production environment. without it, you would 100% run into problems.
+Version control is mandatory for any project, but especially when wanting to create a pipeline that can be used in a production environment. Without it, you would 100% run into problems.
 
 Here I pasted some snippets of the version controlling I used in this project.
 
@@ -684,12 +687,12 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 
 ## 9. Useful links
 
-- How to get github token: <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens>
-- How to use github secrets <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>
-- How to create azure service principle to access azure services: <https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash>
+- How to get Github token: <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens>
+- How to use Github secrets <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>
+- How to create Azure service principle to access Azure services: <https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash>
 - Kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
-- create a Kubernetes cluster in azure azk: <https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli>
-- How to setup a github actions runner:<https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners>
+- create a Kubernetes cluster in Azure azk: <https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli>
+- How to setup a Github actions runner:<https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners>
 
 ## Demos
 
