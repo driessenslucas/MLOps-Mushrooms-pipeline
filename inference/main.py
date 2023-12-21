@@ -11,16 +11,6 @@ import tensorflow as tf
 tf.config.set_visible_devices([], 'GPU')
 
 
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:8000",
-    "http://localhost:8001",
-    "http://localhost:8500",
-    "http://localhost:8600",
-    "http://localhost:8700",
-]
-
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -32,10 +22,7 @@ app.add_middleware(
 
 Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-#normally this would be model_path = os.path.join("mushroom-classification", "INPUT_model_path", "mushroom-cnn")
-#and then model = load_model(model_path)
-#but my regestiation of the model failed the second time around, so I added the model manually into the model registry in azure ml, thus you need this for it to work
-model = load_model('./mushroom-classification/mushroom-cnn')
+model_path = os.path.join('mushroom-classification', "INPUT_model_path", "animal-cnn")
 
 
 

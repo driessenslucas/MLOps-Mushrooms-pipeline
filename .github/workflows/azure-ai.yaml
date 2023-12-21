@@ -113,7 +113,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      # AZURE_CREDENTIALS should be a secret in your repo containing a JSON string of your service principal details
+          # AZURE_CREDENTIALS should be a secret in your repo containing a JSON string of your service principal details
 
       - name: Install YQ
         uses: dcarbone/install-yq-action@v1.1.1
@@ -131,7 +131,7 @@ jobs:
           inlineScript: |
             az extension add --name ml -y
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute create --file ./environment/compute.yaml
+            az ml compute create --file ./environment/compute.yaml --resource-group $GROUP --workspace-name $WORKSPACE
 
       - name: Create Kubernetes cluster
         uses: azure/CLI@v1
@@ -142,18 +142,19 @@ jobs:
           inlineScript: |
             az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons http_application_routing monitoring --enable-msi-auth-for-monitoring --generate-ssh-keys
 
-      - name: Start compute
-        uses: azure/CLI@v1
-        # If the previous step was executed and succeeded or skipped
-        if: ${{ steps.prepare-ml-pipeline.outcome == 'success'  || steps.prepare-ml-pipeline.outcome == 'skipped' }}
-        with:
-          azcliversion: 2.53.0
-          inlineScript: |
-            az extension add --name ml -y
-            az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute start --name mlopsfinal --resource-group $GROUP --workspace-name $WORKSPACE
-            echo $name
-        continue-on-error: true
+      #when using compute instance, compute clusters don't need to be started
+      # - name: Start compute
+      #   uses: azure/CLI@v1
+      #   # If the previous step was executed and succeeded or skipped
+      #   if: ${{ steps.prepare-ml-pipeline.outcome == 'success'  || steps.prepare-ml-pipeline.outcome == 'skipped' }}
+      #   with:
+      #     azcliversion: 2.53.0
+      #     inlineScript: |
+      #       az extension add --name ml -y
+      #       az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
+      #       az ml compute start --name mlopsfinal --resource-group $GROUP --workspace-name $WORKSPACE
+      #       echo $name
+      #   continue-on-error: true
 
       - name: Execute Azure ML Script
         uses: azure/CLI@v1
@@ -166,15 +167,16 @@ jobs:
             az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
             az ml job create --file ./pipelines/mushroom-classification.yaml --set name=mushrooms-classification-${{ github.sha }}-${{ github.run_id }} --stream
 
-      - name: Cleanup Compute
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.53.0
-          inlineScript: |
-            az extension add --name ml -y
-            az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
-            az ml compute stop --name mlopsfinal --resource-group $GROUP --workspace-name $WORKSPACE
-        continue-on-error: true
+      #again compute clusters dont need to be stopped
+      # - name: Cleanup Compute
+      #   uses: azure/CLI@v1
+      #   with:
+      #     azcliversion: 2.53.0
+      #     inlineScript: |
+      #       az extension add --name ml -y
+      #       az configure --defaults group=$GROUP workspace=$WORKSPACE location=$LOCATION
+      #       az ml compute stop --name mlopsfinal --resource-group $GROUP --workspace-name $WORKSPACE
+      #   continue-on-error: true
 
   download:
     needs: azure-pipeline
