@@ -6,6 +6,7 @@ COPY ./voice-overs/ /usr/share/nginx/html/voice-overs/
 COPY index.html /usr/share/nginx/html/
 COPY styles.css /usr/share/nginx/html/
 COPY script.js /usr/share/nginx/html/
+COPY mushroom-2389225_960_720.png /usr/share/nginx/html/
 
 # Expose port 80
 EXPOSE 80

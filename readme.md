@@ -355,6 +355,7 @@ Deployment and service file for the fastapi
 This simple web app creates a fun and interactive way to test the finished product, it's made to do an api request with an uploaded image, based on the result it will display some information about the mushroom. (I added text to speech to spice it up a bit)
 
 You could think the ip should be made to the api-service, but javascript does a server based request and not a client based request, so it should always be a request to the ip of the api itself. (with port-forwarding or a loadbalancer)
+
 In the code snippet below you can see how the api call is done.
 
 ```js
