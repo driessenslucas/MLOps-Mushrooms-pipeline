@@ -354,7 +354,7 @@ Deployment and service file for the fastapi
 
 This simple web app creates a fun and interactive way to test the finished product, it's made to do an api request with an uploaded image, based on the result it will display some information about the mushroom. (I added text to speech to spice it up a bit)
 
-You could think the ip should be made to the api-service, but javascript does a server based request and not a client based request, so it should always be a request to the ip of the api itself. (with port-forwarding or a loadbalancer)
+You could think the ip should be done like this '<http://api-service/upload/image>', but javascript does a browser-based http request and thus will not be able to resolve the hostname to an ip address. So you will need to set the ip to something like this '<http://localhost:8000/upload/image>' (or the ip of your api service if you are running it on a kubernetes cluster.)
 
 In the code snippet below you can see how the api call is done.
 
@@ -409,7 +409,7 @@ Deployment and service for the web app on kubernetes
 
 I also used Gradio to build a simpler gui, since the webapp was made more for fun and as a potential software integration.
 
-This was inplemented in the fastapi app (which wasn't easy to do.... Once the api starts, there will be an endpoint at /gradio, which will then show the gradio interface.)
+This was implemented in the fastapi app (which wasn't easy to do.... Once the api starts, there will be an endpoint at /gradio, which will then show the gradio interface.)
 ![gradio](./images/gradio-gui.png){ width=600px }
 
 ```python
@@ -541,7 +541,7 @@ In a practical scenario, this MLOps pipeline is ready to be integrated into an e
 
 ### 6.1 Fake company
 
-As I didn't really have an actual fake company in mind, I created a webapp (as shown before) but this could be used in a lot of different ways, for example, a company that wants to classify mushrooms for their restaurant, or a company that wants to classify mushrooms for their mushroom farm, or a company that wants to classify mushrooms for their mushroom picking tours.
+As I didn't really have an actual fake company in mind, I created a webapp (as shown before) but this could be used in a lot of different ways. For example, a company that wants to classify mushrooms for their restaurant, a company that wants to classify mushrooms for their mushroom farm or a company that wants to classify mushrooms for their mushroom picking tours.
 
 If there was a better more in depth dataset this could even be used to classify mushrooms in the wild, and help people identify mushrooms (to see if they are edible or not).
 
@@ -570,14 +570,14 @@ In the following sections, I delve into the specifics of each step, illustrating
 ### 7.1 GitHub Actions
 
 I used Github actions to automate the training and deployment of the model. The workflow is defined in the .github/workflows directory.
-It triggers a pipeline that goes the whole process of data extraction, preprocessing, training, evaluation, and deployment. Each directory has its own yaml file for this.
+It triggers a pipeline that goes through the whole process of data extraction, preprocessing, training, evaluation, and deployment. Each directory has its own yaml file for this.
 
 ![github actions](./images/githubworkflow.png){ width=600px }
 
 Pipeline start
 
 Here you can set the environment variables for the pipeline, choosing if you want to create_compute, train_model, skip_training_pipeline, download_model or deploy_model these allow for a more flexible pipeline, where you can choose to skip certain steps.
-Since you don't need to recreate the compute or train the model each time you want to redeploy it.
+Since you don't need to recreate the compute cluster or train the model each time you want to redeploy it.
 ![github actions](./images/pipline-start.png){ width=600px }
 
 ### Jobs
@@ -648,11 +648,11 @@ Within the "download" step of the GitHub Actions workflow, model version retriev
       az ml model download --name mushroom-classification --download-path ./inference --version $VERSION --resource-group $GROUP --workspace-name $WORKSPACE
 ```
 
-In this step, the az ml model list command retrieves the version information for the "mushroom-classification" model. This version is then used to download the corresponding model artifacts to the specified path.
+In this step, the `az ml model list` command retrieves the latest version tag for the "mushroom-classification" model. This is then used to download the corresponding model artifacts.
 
 ### 7.2.3 Model Artifact Storage
 
-The downloaded model artifacts are stored within the "inference" directory, making them easily accessible for deployment and inference.
+This section describes how the downloaded model artifacts are organized for efficient deployment and inference. Unlike the retrieval process, this focuses on the storage and accessibility of the model files:
 
 ```yaml
   - name: Download API Code for Docker
@@ -662,11 +662,11 @@ The downloaded model artifacts are stored within the "inference" directory, maki
     path: inference
 ```
 
-The "docker-config" artifact, which includes the downloaded model, is made available for subsequent steps, such as Docker containerization and deployment.
+In this configuration, the "docker-config" artifact, which now includes the Azure model, is stored in the "inference" directory. This placement ensures that the model is available for the next steps which include: Docker containerization and deployment processes.
 
 ### 7.2.4 Model Deployment Version
 
-When deploying the model, the name is set using the :latest tag (a v1.0 type of tag would be better, but this works).
+When deploying the model, the name is set using the :latest tag.
 
 This makes it easy to always ensure you have the latest version of the model.
 
@@ -692,7 +692,7 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 - How to use Github secrets <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>
 - How to create Azure service principle to access Azure services: <https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash>
 - Kubectl cheat sheet (for debugging): <https://www.bluematador.com/learn/kubectl-cheatsheet>
-- create a Kubernetes cluster in Azure azk: <https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli>
+- Create a Kubernetes cluster in Azure azk: <https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli>
 - How to setup a Github actions runner:<https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners>
 
 ## Demos
@@ -707,7 +707,7 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 
 ## Download model (optional)
 
-(if your model file exceeds 100 MB, You should be using the AzCopy tool for this instead.)
+(If your model file exceeds 100 MB, You should be using the AzCopy tool for this instead.)
 
 ```yaml
 az ml model download --name ${name} --version ${version} --download-path ${path} --resource-group ${group} --workspace-name ${workspace}
