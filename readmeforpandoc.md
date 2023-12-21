@@ -1,20 +1,25 @@
-## Mushroom classification
-
 # MLOps Project Report
 
-(Side note: I'm sorry if I went a little overboard with the project and the documentation.... I had a bit too much fun adding stuff once I got the hang of it.)
+## Author Information
+
+**Name:** Lucas Driessens  
+**Institution:** HOWEST Kortrijk  
+**Course:** MLOps  
+**Date:** 2023-21-12
+**Github repo:<https://github.com/driessenslucas/MLOps-Mushrooms-pipeline>**
 
 ## Table of Contents
 
 - [MLOps Project Report](#mlops-project-report)
+  - [Author Information](#author-information)
   - [Table of Contents](#table-of-contents)
   - [1. Introduction](#1-introduction)
   - [2. Project Overview](#2-project-overview)
     - [2.1 Dataset](#21-dataset)
     - [2.1.1 Data upload](#211-data-upload)
-    - [2.2 AI Model Selection](#22-ai-model-selection)
+    - [2.2 AI Model Selection: VGG19 with Transfer Learning](#22-ai-model-selection-vgg19-with-transfer-learning)
     - [2.2.1 Model decision](#221-model-decision)
-    - [2.3 Data Preprocessing](#23-data-preprocessing)
+    - [2.3 Data Preprocessing: Steps for Optimal Dataset Preparation](#23-data-preprocessing-steps-for-optimal-dataset-preparation)
     - [2.3.1 Data preparation for this specific dataset (done outside of the pipeline)](#231-data-preparation-for-this-specific-dataset-done-outside-of-the-pipeline)
     - [2.3.2 Data prep before training](#232-data-prep-before-training)
     - [2.3.3 Target Label Extraction](#233-target-label-extraction)
@@ -44,7 +49,7 @@
   - [7. Automation and Version Control](#7-automation-and-version-control)
     - [7.1 GitHub Actions](#71-github-actions)
     - [Jobs](#jobs)
-    - [All this can then be tested (locally) with the test.yaml file](#all-this-can-then-be-tested-locally-with-the-testyaml-file)
+    - [test job](#test-job)
     - [7.2 Version Control](#72-version-control)
     - [7.2.1 Training model version](#721-training-model-version)
     - [7.2.2 Model Version Retrieval](#722-model-version-retrieval)
@@ -57,7 +62,7 @@
 
 ## 1. Introduction
 
-This report outlines the details of my MLOps project of mushroom classification. The project's primary objective is to demonstrate the principles of MLOps by building an end-to-end pipeline for creating, training, deploying, and testing a machine learning model using Azure Machine Learning (Azure ML) services. The report highlights key aspects of the project, including data preparation, model training and evaluation, deployment with FastAPI, integration possibilities, and automation strategies.
+This report outlines the details of my MLOps project of mushroom classification. The project's primary objective is to demonstrate the principles of MLOps by building an end-to-end pipeline for creating, training, deploying, and testing a machine learning model using **Azure Machine Learning (Azure ML)** services. The report highlights key aspects of the project, including data preparation, model training and evaluation, deployment with FastAPI, integration possibilities, and automation strategies.
 
 [Look at demo videos](#demos)
 
@@ -70,39 +75,39 @@ This report outlines the details of my MLOps project of mushroom classification.
 The project involves the classification of mushrooms into nine distinct categories. The dataset used for this task contains of 6000+ images of 9 different mushroom families, each separated in its own folder.
 
 The dataset I used:
-<https://www.kaggle.com/datasets/lizhecheng/mushroom-classification>
+[Mushroom Classification Dataset on Kaggle](https://www.kaggle.com/datasets/lizhecheng/mushroom-classification)
 
 ![dataset](./images/kaggle.png){ width=600px }
 
 The dataset contains images like this:
-![dataset](./images/Entoloma_028.jpg){ width=600px }
+![dataset](./images/Entoloma_028.jpg){ width=500px }
 
 ### 2.1.1 Data upload
 
 I manually uploaded the folders onto azure ml data assets for this project.
-![dataset](./images/created_data.png){ width=600px }
+![dataset](./images/created_data.png){ width=400px }
 
-### 2.2 AI Model Selection
+### 2.2 AI Model Selection: VGG19 with Transfer Learning
 
-The chosen model for this mushroom classification project is based on the VGG19 architecture with transfer learning.It performed better than a custom CNN.
+The chosen model for this mushroom classification project is based on the VGG19 architecture with transfer learning.
 
 ### 2.2.1 Model decision
 
-- Custom CNN architecture
-  ![cnn](./images/original_cnn.png){ width=600px }
+Custom CNN architecture
+![cnn](./images/original_cnn.png){ width=1000px }
 
-- Results with a custom CNN
-  ![cnn eval](./images/eval_metrics_original_cnn.png){ width=400px }
+Results with a custom CNN
+![cnn eval](./images/eval_metrics_original_cnn.png){ width=400px }
 
-- Model architecture with Transfer learning (VGG19 imagenet)
-  ![transfer learning](./images/cnn_plot.png){ width=600px }
+Model architecture with Transfer learning (VGG19 imagenet)
+![transfer learning](./images/cnn_plot.png){ width=400px }
 
-- Results with transfer learning (VGG19)
-  ![transfer learning eval ](./images/eval_metrics.png){ width=400px }
+Results with transfer learning (VGG19)
+![transfer learning eval ](./images/eval_metrics.png){ width=400px }
 
 The transfer learning model had better accuracy and recall on all the different classes, so I decided to use that one.
 
-### 2.3 Data Preprocessing
+### 2.3 Data Preprocessing: Steps for Optimal Dataset Preparation
 
 Effective data preprocessing is a really important step in machine learning projects, ensuring that the dataset is ready for model training.
 Here are the steps I took to prepare the data:
@@ -150,7 +155,7 @@ this resizes the images to 400x400, and saves them in the output directory.
             print(f"Error processing {file}: {e}")
 ```
 
-then there is traintestsplit.py, this just takes some images and puts them in a training_folder and test_folder. this is really basic so I wont go into detail here.
+Then there is traintestsplit.py, this just takes some images and puts them in a training_folder and test_folder. this is really basic so I won't go into detail here.
 
 ### 2.3.3 Target Label Extraction
 
@@ -197,7 +202,7 @@ This function reads and converts the images into numerical arrays (pixel values)
 
 ## Prerequisites
 
-<p>Before continuing, ensure you have the following prerequisites set up:</p>
+Before continuing, ensure you have the following prerequisites set up
 
 ### Azure Credentials
 
@@ -273,9 +278,12 @@ Where file is either these files:
 
 ## 4. Model Training and Evaluation
 
+This section outlines the steps involved in training and evaluating the machine learning model.
+
 ### 4.1 Azure ML
 
-![azureml](./images/Classification_job.png){ width=400px }
+here is an overview of the pipeline I created in azure ml:
+![azureml](./images/Classification_job.png){ width=600px }
 
 ### 4.2 Model Training
 
@@ -331,12 +339,12 @@ The trained model is integrated into a fastapi, which Is then build into a docke
 
 I later use this docker image to deploy the api on kubernetes.
 
-- Dockerfile for the fastapi
-  ![fastapi](./images/fastapi-dockerfile.png){ width=600px }
+Dockerfile for the fastapi
+![fastapi](./images/fastapi-dockerfile.png){ width=600px }
 
-- Deployment and service file for the fastapi
-  ![fastapi](./images/Fastapi-deployment.png){ width=600px }
-  ![fastapi](./images/fastapi-service.png){ width=600px }
+Deployment and service file for the fastapi
+![fastapi](./images/Fastapi-deployment.png){ width=600px }
+![fastapi](./images/fastapi-service.png){ width=600px }
 
 ### 5.3 API Endpoints
 
@@ -346,7 +354,7 @@ I later use this docker image to deploy the api on kubernetes.
 
 This simple web app creates a fun and interactive way to test the finished product, its made to do an api request with an uploaded image, based on the result it will display some information about the mushroom. (I added text to speech to spice it up a bit)
 
-Look at the code snippet below to see how the api call is done.
+In the code snippet below you can see how the api call is done.
 
 ```js
 classifyButton.addEventListener('click', function () {
@@ -361,7 +369,7 @@ classifyButton.addEventListener('click', function () {
 			formData.append('img', blob, 'image.png');
 
 			// Send the image file to the FastAPI server
-			fetch('http://api-service/upload/image', {
+			fetch('http://api-service:80/upload/image', {
 				method: 'POST',
 				body: formData,
 			})
@@ -386,12 +394,13 @@ classifyButton.addEventListener('click', function () {
 });
 ```
 
-- Dockerfile for the web app
-  ![webapp](./images/website-dockerfile.png){ width=600px }
+Dockerfile for the web app
+![webapp](./images/website-dockerfile.png){ width=600px }
 
-- Deployment and service for the web app on kubernetes
-  ![webservice](./images/website-deployment.png){ width=600px }
-  ![webservice](./images/website-service.png){ width=600px }
+Deployment and service for the web app on kubernetes
+![webservice](./images/website-deployment.png){ width=600px }
+![webservice](./images/website-service.png){ width=600px }
+![website](./images/website-interface.png){ width=600px }
 
 ### 5.6 Gradio
 
@@ -438,11 +447,11 @@ Kubernetes Cluster Setup
 
 **note:this has been barely tested since I'm limited in public ip's that azure will give me**
 
-As I wasn't sure if this was part of the assignment, I added this as a bonus, I deployed the api and the website on azure kubernetes (instead of on my own machine), this was done by adjusting the github actions file.
+I added this as a bonus, I deployed the api and the website on azure kubernetes (instead of on my own machine), this was done by adjusting the github actions file.
 
-For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in azure and access the api and website from anywhere (I should probably added some type of auth, but since its only able to upload a picture, it should be fine).
+For this I changed my strategy a bit, I changed from working with a clusterIP + port forwarding to a loadbalancer, this way I could set up an external ip in azure and access the api and website from anywhere. Adding some form of authentication might be advisable, but considering the limited functionality restricted to uploading only pictures, it should be sufficient without it.
 
-I had to add some new env variables in the github actions file, for this to work (this is the full updated env section):
+I had to add some new env variables in the github actions file for this to work (this is the full updated env section):
 
 ```yaml
 env:
@@ -461,10 +470,10 @@ env:
   CREATE_CLUSTER: ${{ github.event.inputs.create_cluster }}
 ```
 
-- I then added a new step in the azure-pipeline job:
+I then added a new step in the azure-pipeline job:
 
 ```yaml
-- name: Create Kubernetes cluster
+  - name: Create Kubernetes cluster
   uses: azure/CLI@v1
   id: prepare-kubernetes-cluster
   if: ${{ inputs.create_cluster }}
@@ -474,7 +483,7 @@ env:
       az aks create -g $GROUP -n $CLUSTER --enable-managed-identity --node-count 1 --enable-addons --enable-msi-auth-for-monitoring --generate-ssh-keys
 ```
 
-- And also added a new job responsible for deploying the api and the website on the kubernetes cluster:
+And also added a new job responsible for deploying the api and the website on the kubernetes cluster:
 
 ```yaml
 deploy-kubernetes:
@@ -507,17 +516,18 @@ deploy-kubernetes:
         kubectl apply -f ./inference/deployment.yaml -n $NAMESPACE
 ```
 
-- To ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
-- The deployment/\*-deployment name is the metadata.name in the deployment.yaml files.
+To ensure that the api and website are kept up-to-date I added a 'rolling-update' strategy to the deploy step (where the images get reuploaded to the github packages repo)
+
+The deployment/\*-deployment name is the metadata.name in the deployment.yaml files.
 
 ```yaml
-- name: Update Kubernetes Deployment
+  - name: Update Kubernetes Deployment
   run: |
     kubectl set image deployment/api-deployment api=ghcr.io/driessenslucas/mlops-mushrooms-api:latest -n $NAMESPACE
     kubectl set image deployment/website-deployment website=ghcr.io/driessenslucas/mlops-mushrooms-website:latest -n $NAMESPACE
 ```
 
-- Proof of this working (look at the ip's):
+- if you look at the api's you can see that it is working:
   ![services](./images/azure-clusters.png){ width=600px }
   ![website](./images/webapp-on-azure.png){ width=600px }
   ![api](./images/fastapi-on-azure.png){ width=600px }
@@ -525,13 +535,12 @@ deploy-kubernetes:
 ## 6. Integration with Existing Software
 
 In a practical scenario, this MLOps pipeline is ready to be integrated into an existing software system.
-![website](./images/website-interface.png){ width=600px }
 
 ### 6.1 Fake company
 
 As I didn't really have an actual fake company in mind, I created a webapp (as shown before) but this could be used in a lot of different ways, for example, a company that wants to classify mushrooms for their restaurant, or a company that wants to classify mushrooms for their mushroom farm, or a company that wants to classify mushrooms for their mushroom picking tours.
 
-If there was a better more in depth dataset this could even be used to classify mushrooms in the wild, and help people identify mushrooms (to see if the are edible or not).
+If there was a better more in depth dataset this could even be used to classify mushrooms in the wild, and help people identify mushrooms (to see if they are edible or not).
 
 ### 6.1.1 Integration in an existing software system
 
@@ -540,7 +549,7 @@ fastapi endpoints.... So there isnt much to it, you could deploy the api to a co
 
 ## 7. Automation and Version Control
 
-In this project I mainly used GitHub Actionsm which allows for the orchestration of various tasks, from data handling to model training and deployment, all triggered by specific GitHub events like code commits.
+In this project I mainly used GitHub Actions which allows for the orchestration of various tasks, from data handling to model training and deployment, all triggered by specific GitHub events like code commits.
 
 Automation and version control are found all over my MLOps pipeline.
 The key components of my automation strategy include:
@@ -562,11 +571,11 @@ It triggers a pipeline that goes the whole process of data extraction, preproces
 
 ![github actions](./images/githubworkflow.png){ width=600px }
 
-- Pipeline start
-  Here you can set the environment variables for the pipeline, chosing if you want to create_compute, train_model, skip_training_pipeline, download_model or deploy_model
-  these allow for a more flexible pipeline, where you can choose to skip certain steps.
-  since you dont need to recreate the compute or train the model each time you want to redeploy it.
+Pipeline start
 
+Here you can set the environment variables for the pipeline, chosing if you want to create_compute, train_model, skip_training_pipeline, download_model or deploy_model
+these allow for a more flexible pipeline, where you can choose to skip certain steps.
+since you dont need to recreate the compute or train the model each time you want to redeploy it.
 ![github actions](./images/pipline-start.png){ width=600px }
 
 ### Jobs
@@ -578,7 +587,7 @@ This job will login and create and/or start the compute cluster. and start the t
 
 download model:
 
-This will download the registred model from azure ml and save it in the ./inference directory on the created machine.
+This will download the registred model from azure ml and save it in the ./inference directory.
 ![github actions](./images/download-job.png){ width=600px }
 
 deploy model:
@@ -586,7 +595,7 @@ deploy model:
 This will deploy the docker files to the github packages repo
 ![github actions](./images/deploy-job.png){ width=600px }
 
-### All this can then be tested (locally) with the test.yaml file
+### test job
 
 Testing file:
 
@@ -597,7 +606,7 @@ After testing is done it removes the namespace and all the containing services.
 
 ### 7.2 Version Control
 
-Version control is mendatory for any project, but especially when wanting to create a pipeline that can be used in a production environment. without it, you would 100% run into problems.
+Version control is mandatory for any project, but especially when wanting to create a pipeline that can be used in a production environment. without it, you would 100% run into problems.
 
 Here I pasted some snippets of the version controlling I used in this project.
 
@@ -606,7 +615,7 @@ Here I pasted some snippets of the version controlling I used in this project.
 When training the model, the name is set using github.sha and github.run_id, this ensures that each model has a unique name, and that the model can be traced back to the commit and run that created it.
 
 ```yaml
-- name: Execute Azure ML Script
+  - name: Execute Azure ML Script
 uses: azure/CLI@v1
 id: azure-ml-pipeline
 if: ${{ inputs.train_model }}
@@ -624,7 +633,7 @@ az ml job create --file ./pipelines/mushroom-classification.yaml --set name=mush
 Within the "download" step of the GitHub Actions workflow, model version retrieval is performed. This step ensures that the latest version of the trained AI model is obtained from the Azure Machine Learning workspace:
 
 ```yaml
-- name: Set model version
+  - name: Set model version
   uses: azure/CLI@v1
   with:
     azcliversion: 2.53.0
@@ -642,7 +651,7 @@ In this step, the az ml model list command retrieves the version information for
 The downloaded model artifacts are stored within the "inference" directory, making them easily accessible for deployment and inference.
 
 ```yaml
-- name: Download API Code for Docker
+  - name: Download API Code for Docker
   uses: actions/download-artifact@v2
   with:
     name: docker-config
@@ -658,7 +667,7 @@ When deploying the model, the name is set using the :latest tag (a v1.0 type of 
 This makes it easy to always ensure you have the latest version of the model.
 
 ```yaml
-- name: Docker Build and push
+  - name: Docker Build and push
   id: docker_build
   uses: docker/build-push-action@v2
   with:
@@ -691,8 +700,6 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 <https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/c75f7b37-0d1c-4acc-b045-bb258e13633c>
 
 <https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/cd7ff6f4-3cc3-468a-aed1-70c9643b79da>
-
----
 
 ## Download model (optional)
 
