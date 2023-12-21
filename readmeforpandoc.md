@@ -698,11 +698,11 @@ I had a lot of fun learning while doing this project, I hope my documentation is
 
 (Use sound for the web app demo to hear the description being read out loud)
 
-<https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/654ceb40-4fa5-4354-b318-4921450ee955>
+<https://github.com/driessenslucas/MLOps-Mushrooms-pipeline/assets/91117911/aa298110-a177-430b-8cbd-eea3187c320b>
 
-<https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/c75f7b37-0d1c-4acc-b045-bb258e13633c>
+<https://github.com/driessenslucas/MLOps-Mushrooms-pipeline/assets/91117911/7c51e0a4-130d-456a-9493-f6c235b66ed6>
 
-<https://github.com/driessenslucas/MLOps-pipelines-2023-main/assets/91117911/cd7ff6f4-3cc3-468a-aed1-70c9643b79da>
+<https://github.com/driessenslucas/MLOps-Mushrooms-pipeline/assets/91117911/2cbce7f0-3862-4e46-bee7-799034fafc18>
 
 ## Download model (optional)
 
