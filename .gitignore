@@ -10,3 +10,6 @@ actions-runner/
 inference/mushroom-classification/INPUT_model_path/mushroom-cnn/*
 
 inference/mushroom-classification/*
+
+
+*.tex
