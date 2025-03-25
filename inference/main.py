@@ -22,9 +22,9 @@ app.add_middleware(
 
 Mushrooms = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus']
 
-model_path = os.path.join('mushroom-classification', "INPUT_model_path", "animal-cnn")
+model_path = os.path.join('mushroom-classification', "INPUT_model_path", "mushroom-cnn")
 
-
+model = load_model(model_path)
 
 async def gradio():
     # implement gradio
